@@ -1,9 +1,11 @@
 # Chapter 1. Introduction
 
-**Useful Commands**
+## Commands
 
-```
-rustup update
-rustup self uninstall
-```
+| Command | How |
+|---------|-----|
+| Update  | `rustup update` |
+| Uninstall | `rustup self uninstall` |
+| Version | `rustc --version` |
+| Documentation | `rustup doc` |
 
