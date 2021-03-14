@@ -12,9 +12,12 @@
 
 ## Cargo Commands
 
-Cargo is Rust's build system and package manager.
+Cargo is Rust's build system and package manager. Its configuration is stored in `Cargo.toml`.
 
 | Command | How |
 |---------|-----|
 | Version | `cargo --version` |
 | New Project | `cargo new [project name]` |
+| Build | `cargo build` |
+| Run | `cargo run ` |
+| Check without compile | `cargo check` |
