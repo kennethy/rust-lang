@@ -58,5 +58,5 @@ fn main() {
 
     // declare an array with same values
     let a = [3; 5]; // [size; value]
-    println!("{:?}", a)
+    println!("{:?}", a);
 }
