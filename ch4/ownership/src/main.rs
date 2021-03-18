@@ -18,4 +18,6 @@ fn main() {
     let x1 = String::from("str");
     let x2 = x1.clone();
     println!("clone performs deep copy, x1 = {}, x2 = {}", x1, x2);
+
+
 }

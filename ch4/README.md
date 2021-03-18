@@ -38,3 +38,55 @@ let s1 = gives_ownershop(); // whatever is returned from fn
 let s2 = String::from("hello");
 let s3 = takes_and_gives_back(s2); // s2 is moved
 ```
+
+**References**
+
+```rust
+let s1 = String::from("hello world");
+let len = calculate_length(&s1);
+
+// ...
+// s is a reference to a String
+// references allow you to refer to some value without taking ownership of it
+fn calculate_length(s: &String) -> usize { // 
+    s.len()
+} // s goes out of scope but nothing happens
+```
+
+Borrowing is when a reference is passed as a parameter to a function. We are not allowed to modify the value the reference points to.
+
+**Mutable References**
+
+Only one mutable reference to a particular piece of data in a particular scope.
+
+```rust
+let mut s = String::from("hello world");
+fn(&mut s); // &s to allow modify fn to update value s points to
+
+fn(s: &mut String) {
+    s.push_str(", appended content");
+}
+```
+
+In addition, we cannot have a mutable reference while we have an immutable one in the same scope. 
+
+```rust
+ let mut s = String::from("hello");
+
+let r1 = &s; // ok
+let r2 = &s; // ok
+let r3 = &mut s; // not ok
+```
+
+The scope of reference start from where it's first being initialized and continues through the last time the reference is used.
+
+```rust
+let mut s = String::from("hello");
+let r1 = &s;
+let r2 = &s;
+
+println!("{}, {}", r1, r2); // r1 r2 out of scope after here
+
+let r3 = &mut s; // ok here
+println!("{}", r3);
+```
