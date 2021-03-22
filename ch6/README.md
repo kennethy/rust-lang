@@ -87,6 +87,19 @@ fn value_in_cents(coin: Coin) -> u8 {
             println!("use state {:?}", state);
             25
         },
+        _ => (), // '_' matches any value, `()` unit value, does not do anything
     }
+}
+```
+
+**Concise with If Let**
+
+```rust
+let mut count = 0;
+
+if let Coin::Quarter(state) = coin {
+    println!("State quarter from {:?}!", state);
+} else {
+    count += 1;
 }
 ```
