@@ -90,3 +90,29 @@ println!("{}, {}", r1, r2); // r1 r2 out of scope after here
 let r3 = &mut s; // ok here
 println!("{}", r3);
 ```
+
+## Slices
+
+**String slices**
+
+```rust
+let s = String::from("hello world!");
+let hello = &s[0..5]; // => "hello"
+let world = &s[6..11]; // => world
+```
+
+**Subslices**
+
+```rust
+let a = [1, 2, 3];
+let len = a.len();
+
+// omit start
+let slice = [..len];
+
+// omit end
+let slice = [0..];
+
+// whole slice
+let slice = a[..];  // same as a[0..len]
+```
