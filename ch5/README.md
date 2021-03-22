@@ -51,4 +51,51 @@ struct Point(i32, i32, i32); // note Point is not the same as Color
 
 let black = Color(0, 0, 0);
 let origin = Point(0, 0, 0);
+
+// access fields with dot notitation
+println!("{}", black.0);
+```
+
+# Derived Traits
+
+```rust
+#[derive(Debug)] // make `Rectangle` printablewith {:?}
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+println!("{:?}", ret); // print ret and its field values
+println!("{:#?}", ret); // pretty prints ret
+```
+
+# Defining Methods
+
+```rust
+impl Rectangle {
+    // just want to borrow, so use &self
+    // self param is used for transformation and
+    // don't want to return previous instance
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+}
+```
+
+# Associated Functions
+
+```rust
+impl Rectangle {
+    fn square(size: u32) -> Rectangle {
+        Rectangle {
+            width: size,
+            height: size,
+        }
+    }
+}
+```
+
+then call
+```rust
+Rectangle::square(50);
 ```
