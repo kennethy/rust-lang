@@ -90,3 +90,93 @@ pub fn eat_at_restaurant() {
 ## Pub Enums
 
 If an enum is public, then so are its variants.
+
+## 'use' keyword
+
+The idiomatic way is to `use` the path up to the module level when bringing in functions. Use the full path when bringing in structs, enums, and other items.
+
+```rust
+mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+
+use crate::front_of_house::hosting;
+// idiomatic way 
+// or use self::front_of_house::hosting;
+
+
+pub fn eat_at_restaurant() {
+    hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
+}
+```
+
+## 'as' keyword
+
+Rename method with 'as' keyword.
+
+```rust
+use std::fmt::Result;
+use std::io::Result as IoResult;
+
+fn function1() -> Result {
+    // --snip--
+}
+
+fn function2() -> IoResult<()> {
+    // --snip--
+}
+```
+
+## Re-export
+
+Use `pub use` to allow external code to use a function that was brought into the current scope
+
+```rust
+mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
+    }
+}
+
+pub use crate::front_of_house::hosting;
+
+pub fn eat_at_restaurant() {
+    hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
+    hosting::add_to_waitlist();
+}
+```
+
+## Nested Paths
+
+```rust
+// from
+use std::cmp::Ordering;
+use std::io;
+
+// to
+use std::{cmp::Ordering, io};
+
+```
+
+or
+
+```rust
+// from
+use std::io;
+use std::io::Write;
+
+// to
+use std::io::{self, Write};
+```
+
+## Glob
+
+```rust
+use std::collections::*;
+```
