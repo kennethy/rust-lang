@@ -196,3 +196,11 @@ scores.insert(String::from("key"), 123);
 let entry = score.entry(String::from("key")).or_insert(0);
 *entry += 1;
 ```
+
+### Iteration
+
+```rust
+for (key, value) in &m {
+    println!("key: {} val: {}", key, value);
+}
+```
