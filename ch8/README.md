@@ -86,3 +86,51 @@ let row = vec![
     SpreadsheetCell::Float(10.12),
 ];
 ```
+
+## Strings
+
+### Declaration
+```rust
+let s1 = String::from("hello world");
+
+// or 
+let s2 = "hello world".to_string()
+```
+
+### Update
+```rust
+let mut s = "hello ";
+
+// push a string
+s.push_str("world");
+
+// or push a char
+s.push('a');
+```
+
+### Concat
+
+String's add (+ operator) fn takes ownership.
+
+```rust
+let s1 = String::from("tic");
+let s2 = String::from("tac");
+let s3 = String::from("toe");
+
+let s = s1 + "-" + &s2 + "-" + &s3;
+```
+
+### Iteration
+
+Indexing on strings are not allowed as it would not make sense for Unicode scalar values. Each unit may take more than a byte.
+
+```rust
+for c in “我喜欢你”.chars() {
+    println!("{}", c);
+}
+
+// or
+for c in "hello world".bytes() {
+    println!("{}", b);
+}
+```
