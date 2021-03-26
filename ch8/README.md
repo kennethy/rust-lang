@@ -118,6 +118,9 @@ let s2 = String::from("tac");
 let s3 = String::from("toe");
 
 let s = s1 + "-" + &s2 + "-" + &s3;
+
+// or
+let s = format!("{}-{}-{}", s1, s2, s3); // does not take ownership
 ```
 
 ### Iteration
@@ -133,4 +136,63 @@ for c in “我喜欢你”.chars() {
 for c in "hello world".bytes() {
     println!("{}", b);
 }
+```
+
+## HashMap
+
+### Declaration
+
+All keys must be the same type, and all values must be the same type.
+```rust
+use std::collections::HashMap;
+
+let mut m = HashMap::new();
+
+m.insert(String::from("one"), 1);
+m.insert(String::from("two"), 2);
+```
+
+or 
+
+```rust
+let v1 = vec![1, 2, 3];
+let v2 = vec![String::from("one"), String::from("two"), String::from("three")];
+
+// key/value type is inferred
+// zip() returns tuples
+// collect() turns tuples into a HashMap
+let m: HashMap<_, _> = v1.into_iter().zip(v2.into_iter()).collect();
+```
+
+```rust
+let field_name = String::from("Favorite color");
+let field_value = String::from("Blue");
+
+let mut map = HashMap::new();
+map.insert(field_name, field_value);
+// field_name and field_value are invalid at this point
+```
+
+### Update
+
+Overwrite
+```rust
+let mut scores = HashMap::new();
+scores.insert(String::from("Blue"), 10);
+scores.insert(String::from("Blue"), 25);
+```
+
+Insert if the key does not already exist
+```rust
+let mut scores = HashMap::new();
+scores.entry(String::from("key")).or_insert(100);
+```
+
+Update based on old value
+```rust
+let mut scores = HashMap::new();
+scores.insert(String::from("key"), 123);
+
+let entry = score.entry(String::from("key")).or_insert(0);
+*entry += 1;
 ```
