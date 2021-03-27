@@ -25,6 +25,13 @@ println!("x1 = {}, x2 = {}", x1, x2);
 
 Simple scalar values and nothing that requires allocation can implement `Copy`, to prevent the `move` behaviour.
 
+```rust
+let x = 5;
+let y = x; // no ownership transfer, because x, i32, is stored on stack
+
+println!("x = {}, y = {}", x, y);
+```
+
 **Ownership Transfer**
 
 ```rust
