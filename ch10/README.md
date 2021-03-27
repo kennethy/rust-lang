@@ -151,3 +151,17 @@ fn returns_summarizable(switch: bool) -> impl Summary {
     }
 }
 ```
+
+### Conditionally implement methods
+
+```rust
+struct Pair<T> { ... }
+
+impl<T: Display + PartialOrd> Pair<T> {
+    // ...
+}
+```
+
+### Blanket Implementations
+
+When implementing a trait on any type that satisfies the trait bounds
