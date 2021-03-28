@@ -165,3 +165,82 @@ impl<T: Display + PartialOrd> Pair<T> {
 ### Blanket Implementations
 
 When implementing a trait on any type that satisfies the trait bounds
+
+## Lifetimes
+
+Annotations to help the borrower checker to ensure there are not dangling pointers.
+### Syntax
+
+```rust
+&i32
+&'a i32
+&'a mut i32
+```
+
+### Annotations in Functions
+
+Used when one of the parameters is a reference.
+
+```rust
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+```
+
+### Annotations in Structs
+
+Used when a struct uses references. 
+
+```rust
+struct ImportantExcerpt<'a> {
+    part: &'a str,
+}
+```
+
+### Lifetime Ellison
+
+Compiler will add the lifetime annotations automatically based on three rules below. The compiler will complain if any of the parameters don't gets its lifetime resolved.
+
+1. Each parameter that is a reference gets its own lifetime annotation.
+2. If there's exactly one input lifetime parameter, that lifetime is assigned to all output lifetime parameters.
+3. If one of the input lifetime parameters is `&self`, or `&mut self`, then the lifetime of `self` is assigned to all output lifetime parameters.
+
+### Annotations in Method Defintions
+
+Lifetime names for struct fields always need to be declared.
+
+```rust
+impl<'a> ImportantExcerpt<'a> {
+    fn level(&self) -> i32 {
+        3
+    }
+}
+```
+
+### Static lifetime
+
+`static` means the reference can live for the entire duration of the program.
+
+```
+let s: &'static str = "I have a static lifetime.";
+```
+
+### Generic type parameters, trait bounds, and lifetimes together
+
+```rust
+use std::fmt::Display;
+
+fn longest_with_an_announcement<'a, T>(
+    x: &'a str,
+    y: &'a str,
+    ann: T,
+) -> &'a str
+where
+    T: Display,
+{
+    println!("Announcement! {}", ann);
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+```
