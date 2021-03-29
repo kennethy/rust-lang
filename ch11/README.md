@@ -79,3 +79,36 @@ mod tests {
     }
 }
 ```
+
+## Controlling how the tests run
+
+By default, tests are run in parallel. Use the following to configure the tests to run in sequence.
+
+```sh
+cargo test -- --test-threads=1
+```
+
+By default, `println!` are captured/surpressed for passing tests. Can show all output with:
+```sh
+cargo test -- --show-output
+```
+
+Run subset of tests.
+
+```sh
+cargo test [N_NAME_PATTERN]
+```
+
+Ignore tests with:
+```rust
+#[test]
+#[ignore]
+fn ignored_fn() {
+
+}
+```
+
+Or run only the ignored tests
+```sh
+cargo test -- --ignored
+```
