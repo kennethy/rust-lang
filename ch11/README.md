@@ -112,3 +112,31 @@ Or run only the ignored tests
 ```sh
 cargo test -- --ignored
 ```
+
+## Tests Organization
+
+`#[cfg(test)]` tells the compiler to not include the tests module when running `cargo build`.
+
+### Unit Tests
+
+By convention, placed under `src/` and annotated with `#[cfg(test)]`.
+### Integration tests
+
+By convention, they are placed in the `tests` folder at the top level of the project directory, and without the `#[cfg(test)]`. Integration tests use your library in the same way any other code would. This is supported only for lib crates.
+
+```rust
+// tests/integration_test.rs
+use adder;
+
+#[test]
+fn it_adds_two() {
+    assert_eq!(4, adder::add_two(2));
+}
+```
+
+Run specific integration tests
+```
+cargo test --test [PATTERN]
+```
+
+Utils are named with the special name `mod.rs`.
