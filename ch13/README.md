@@ -50,3 +50,51 @@ impl<T> Cacher<T> {
     }
 }
 ```
+
+## Iterators
+
+`iter()`  returns immutable references. `into_iter()` for owned values, and `iter_mut()` for mutable references.
+
+```rust
+let v1 = vec![1, 2, 3];
+let iter = v1.iter();
+
+for i in iter {
+    println!("{}", i);
+}
+```
+
+### Iter Trait
+
+```rust
+pub trait Iterator {
+    type Item;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        // ...
+    }
+}
+```
+
+### Next Method
+
+```rust
+let v1 = vec![1, 2, 3];
+
+// needs to be mutable since calling .next() 
+let mut iter = v1.iter();
+assert_eq!(iter.next(), Some(&1));
+assert_eq!(iter.next(), Some(&2));
+assert_eq!(iter.next(), Some(&3));
+assert_eq!(iter.next(), None);
+```
+
+### Methods That Consume the Iterator
+
+Methods calling the `next` method are called the consuming adaptors.
+
+```rust
+let v1 = vec![1, 2, 3];
+let iter = v1.iter();
+let total: i32 = iter.sum(); // consumes the iter
+```
