@@ -89,7 +89,7 @@ assert_eq!(iter.next(), Some(&3));
 assert_eq!(iter.next(), None);
 ```
 
-### Methods That Consume the Iterator
+### Methods that Consume the Iterator
 
 Methods calling the `next` method are called the consuming adaptors.
 
@@ -97,4 +97,49 @@ Methods calling the `next` method are called the consuming adaptors.
 let v1 = vec![1, 2, 3];
 let iter = v1.iter();
 let total: i32 = iter.sum(); // consumes the iter
+```
+
+### Methods that Produce Other Iterators
+
+Iterators are lazily evaulated.
+
+```rust
+let v1: Vec<i32> = vec![1, 2, 3];
+v1.iter().map(|x| x + 1);
+```
+
+We can manually consumed the iterator by calling `collect()`.
+
+```rust
+let v2 = v1.iter().map(|x| x + 1).collect();
+```
+
+### Custom Iterators
+
+```rust
+struct Counter {
+    value: u32,
+}
+
+impl Counter {
+    fn new() -> Counter {
+        Counter { value: 0 }
+    }
+}
+
+impl Iterator for Counter {
+    // specify type for returned value
+    type Item = u32;
+
+    // mutable reference since the iterator will be consumed
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.value < 5 {
+            self.value += 1;
+            Some(self.value)
+        } else {
+            None
+        }
+    }
+}
+
 ```
