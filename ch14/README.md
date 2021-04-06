@@ -65,3 +65,29 @@ Publish with `cargo publish`. The publish is permanent, and there's no way to de
 ### Remove Versions
 
 Use `cargo yank --vers 1.0.1` to prevent new crates on depending the specified version. Undo with `cargo yank --vers 1.0.1 --undo`.
+
+##  Cargo Workspaces
+
+A workspace is a set of packages that share the same `Cargo.lock` and output directory.
+
+```toml
+# Cargo.toml in root folder
+[workspace]
+
+members = [
+    "adder",
+    "add-one",
+]
+```
+
+Specify which package to run with
+
+```sh
+cargo run -p [PACKAGE_NAME]
+```
+
+Or test specific package
+
+```sh
+cargo test -p [PACKAGE_NAME]
+```
