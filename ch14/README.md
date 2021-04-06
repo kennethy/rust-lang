@@ -91,3 +91,13 @@ Or test specific package
 ```sh
 cargo test -p [PACKAGE_NAME]
 ```
+
+## Installing Rust Binaries
+
+```rust
+cargo install [PACKAGE NAME]
+```
+
+## Extending Cargo with custom commands
+
+If a binary in `$PATH` is named `cargo-something`, then it can be run as a subcommand `cargo something`. Use `cargo --list` to list them all.
