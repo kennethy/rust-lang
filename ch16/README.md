@@ -128,3 +128,57 @@ let tx1 = tx.clone();
 
 // both tx1 and tx can be used in threads to send values
 ```
+
+## 16.3 Shared State Concurrency
+
+### Using Mutexes
+
+```rust
+use std::sync::Mutex;
+
+fn main() {
+    let m = Mutex::new(5);
+
+    {
+        let mut num = m.lock().unwrap();
+        *num = 6;
+    }
+
+    println!("m = {:?}", m);
+}
+```
+
+`lock()` blocks the current thread until the lock is obtained.
+
+`unwrap()` is called in case the other thread holding the lock panics. This ensures the current thread will panic as well.
+
+Both calls are called in an inner scope because `lock()` returns a smart pointer `MutexGuard` then will release the lock once it becomes out of scope.
+
+### Multiple Ownership with Multiple Threads
+
+```rust
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    // Arc is a thread-safe alternative to Rc. `a` stands for atomic.
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Arc::clone(&counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+            *num += 1;
+        });
+
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("result: {}", *counter.lock.unwrap());
+}
+```
