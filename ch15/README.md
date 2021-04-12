@@ -49,3 +49,31 @@ Rust does deref coercion when it finds types and  trait implementations in three
 1. From `&T` to `&U` when `T: Deref<Target = U>`
 2. From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
 3. From `&mut T` to `T: Deref<Target=U>`
+
+## 15.3 Running Code on Cleanup with the `Drop` Trait
+
+Implementing the `Drop` trait allows us to specify the code to run when a value goes out of scope. It requires an implementation of `fn drop(&mut self)`. The trait is included in the prelude. Variables are dropped in the reverse order of their creation.
+
+```rust
+struct CustomSmartPointer {
+    data: String,
+}
+
+impl Drop for CustomSmartPointer {
+    fn drop(&mut self) {
+        println!("Dropping CustomSmartPointer with data `{}`!", self.data);
+    }
+}
+```
+
+### Dropping a Value early with `std::mem::drop`
+
+Rust does not allow calling `val.drop()` directly. Use `std::mem::drop` instead.
+
+```rust
+// std::mem::drop is in the prelude
+drop(v);
+```
+
+
+
