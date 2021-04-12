@@ -75,5 +75,6 @@ Rust does not allow calling `val.drop()` directly. Use `std::mem::drop` instead.
 drop(v);
 ```
 
+## 15.4 `Rc<T>`, the Reference Counted Smart Pointer
 
-
+`Rc<T>`, abbreviated for reference counting, is a  smart pointer type that keep tracks of the number of references to a value. It's applicable when a value has multiple owners. It's only for use in single-threaded scenarios.
