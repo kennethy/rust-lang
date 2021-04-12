@@ -78,3 +78,31 @@ drop(v);
 ## 15.4 `Rc<T>`, the Reference Counted Smart Pointer
 
 `Rc<T>`, abbreviated for reference counting, is a  smart pointer type that keep tracks of the number of references to a value. It's applicable when a value has multiple owners. It's only for use in single-threaded scenarios.
+
+
+```rust
+enum List {
+    Cons(i32, Rc<List>),
+    Nil,
+}
+
+use crate::List::{Cons, Nil};
+use std::rc::Rc;
+
+fn main() {
+    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    let b = Cons(3, Rc::clone(&a));
+    let c = Cons(4, Rc::clone(&a));
+}
+```
+
+We need to `use std::rc::Rc` because it's not in the prelude. Every call to `Rc::clone()` increments the reference count.
+
+Use `Rc::strong_count()` to get the reference count.
+
+```rust
+fn main() {
+    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    println!("count after creating a = {}", Rc::strong_count(&a));
+}
+```
