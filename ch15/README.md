@@ -106,3 +106,9 @@ fn main() {
     println!("count after creating a = {}", Rc::strong_count(&a));
 }
 ```
+
+## 15.5 `RefCell<T>` and the Interior Mutability
+
+With `RefCell<T>`, the borrowing rules' invariants are enforced at runtime.
+
+Mutating the value inside an immutable value is the interior mutability pattern.
