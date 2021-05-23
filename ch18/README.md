@@ -33,3 +33,17 @@ if let Some(color) = favorite_color {
 ```
 
 - `If let` does not need to be exhaustive like match arms.
+
+## 18.2 Refutability
+
+Patterns have two forms:
+1. Irefutable: patterns that will match any value, like `let x = 5;`
+2. Refutable: patterns that can fail to match for some possible values
+
+```rust
+// some_option_value could be None, but let x = y is a irrefutable pattern therefore we wrap it with `if`
+// to handle the cause for unmatched values
+if let Some(val) = some_option_value {
+    ...
+}
+```
