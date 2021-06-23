@@ -42,7 +42,7 @@ Patterns have two forms:
 
 ```rust
 // some_option_value could be None, but let x = y is a irrefutable pattern therefore we wrap it with `if`
-// to handle the cause for unmatched values
+// to handle the case for unmatched values
 if let Some(val) = some_option_value {
     ...
 }
