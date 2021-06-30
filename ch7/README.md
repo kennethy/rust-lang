@@ -18,7 +18,7 @@ mod module_name {
 
 ## Referencing Functions within modules
 
-By default, all items (functions, methods, structs, enums, modules, and constants) are private.
+By default, all items (functions, methods, structs, enums, modules, and constants) are private. Silbings have access to each other. Child module can refer to modules defined in the parent modules.
 
 
 ```rust
