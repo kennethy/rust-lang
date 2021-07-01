@@ -9,7 +9,7 @@
 
 ```rust
 let y1 = String::from("str");
-let y2 = y1; // underlying data is moved from y1 to y2
+let y2 = y1; // underlying data is 'moved' from y1 to y2. Not calling it shallow copy because y1 is dropped.
 println!("{}", y1); // this will not be allowed
 ```
 
@@ -97,6 +97,11 @@ println!("{}, {}", r1, r2); // r1 r2 out of scope after here
 let r3 = &mut s; // ok here
 println!("{}", r3);
 ```
+
+**Rule of References**
+
+- At any given time, you can have either one mutable reference or any number of immutable references.
+- References must always be valid.
 
 ## Slices
 
