@@ -8,7 +8,7 @@
 fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
     let mut largest = &list[0];
 
-    for i in list {
+    for &i in list { // &i here because &[T] is passed
         if i > largest {
             largest = i;
         }
@@ -65,7 +65,7 @@ The process of turning generic code into specific code by filling in the concret
 
 ## Traits
 
-Add common functionalities to different types. Similar to interfaces. One One restriction is that we cannot implement external traits on external types.
+Add common functionalities to different types. Similar to interfaces. One restriction is that we cannot implement external traits on external types.
 
 ```rust
 pub trait Summary {
@@ -156,6 +156,12 @@ fn returns_summarizable(switch: bool) -> impl Summary {
 
 ```rust
 struct Pair<T> { ... }
+
+impl<T> Pair<T> {
+    fn new(x: T, y: T) -> Self {
+        Self { x, y}
+    }
+}
 
 impl<T: Display + PartialOrd> Pair<T> {
     // ...

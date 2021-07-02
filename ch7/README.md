@@ -1,5 +1,7 @@
 # Chapter 7. Packages, Crates, and Modules
 
+The crate root is a source file that the Rust compiler starts from and makes up the root module. A package contains a `Cargo.toml` and is formed by one or more crates. A package must contain zero or one library crates.
+
 ## Create a lib cargo with
 ```rust
 cargo new --lib [PACKAGE_NAME]
