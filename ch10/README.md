@@ -174,6 +174,8 @@ When implementing a trait on any type that satisfies the trait bounds
 
 ## Lifetimes
 
+Lifetime annotations describe the relationships of the lifetime of multiple references to each other without affecting the lifetime.
+
 Annotations to help the borrower checker to ensure there are not dangling pointers.
 ### Syntax
 
@@ -186,6 +188,10 @@ Annotations to help the borrower checker to ensure there are not dangling pointe
 ### Annotations in Functions
 
 Used when one of the parameters is a reference.
+
+When returning a reference from a function, the lifetime parameter for the return type needs to match the lifetime parameter for one of the parameters.
+
+Lifetime syntax is about connecting the lifetime of various parameters and return values of functions — to prevent dangling references.
 
 ```rust
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
@@ -203,7 +209,7 @@ struct ImportantExcerpt<'a> {
 
 ### Lifetime Ellison
 
-Compiler will add the lifetime annotations automatically based on three rules below. The compiler will complain if any of the parameters don't gets its lifetime resolved.
+Compiler will add the lifetime annotations automatically based on three rules below. The compiler will complain if any of the parameters don't get its lifetime resolved. Rules apply to to function definitions and `impl` blocks.
 
 1. Each parameter that is a reference gets its own lifetime annotation.
 2. If there's exactly one input lifetime parameter, that lifetime is assigned to all output lifetime parameters.
@@ -223,7 +229,7 @@ impl<'a> ImportantExcerpt<'a> {
 
 ### Static lifetime
 
-`static` means the reference can live for the entire duration of the program.
+`static` means the reference can live for the entire duration of the program. All string literals have the static lifetime.
 
 ```
 let s: &'static str = "I have a static lifetime.";
