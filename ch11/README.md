@@ -122,7 +122,11 @@ cargo test -- --ignored
 By convention, placed under `src/` and annotated with `#[cfg(test)]`.
 ### Integration tests
 
-By convention, they are placed in the `tests` folder at the top level of the project directory, and without the `#[cfg(test)]`. Integration tests use your library in the same way any other code would. This is supported only for lib crates.
+By convention, they are placed in the `tests` folder at the top level of the project directory, and without the `#[cfg(test)]`. Cargo treats the `tests` folder specially and compile the crates only when running `cargo test`.
+
+Integration tests use your library in the same way any other code would.
+
+This is supported only for lib crates.
 
 ```rust
 // tests/integration_test.rs
@@ -139,4 +143,4 @@ Run specific integration tests
 cargo test --test [PATTERN]
 ```
 
-Utils are named with the special name `mod.rs`.
+Utils are named with the special name `mod.rs`. They would not show when running `cargo test --test`.
