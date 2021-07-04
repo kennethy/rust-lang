@@ -1,12 +1,18 @@
 # Chapter 15. Smart Pointers
 
-Smart pointers not only act like a pointer, but have additional metadata and capabilities. They are usually implemented using structs that implement `Deref` and `Drop` traits.
+Smart pointers not only act like a pointer, but have additional metadata and capabilities. References are pointers that only borrow data, whereas smart pointers own the data they point to. They are usually implemented using structs that implement `Deref` and `Drop` traits.
 
 `Deref` trait allows an instance of the smart pointer struct to behave like a reference, and `Drop` trait allows you to customize the code to run when the smart pointer goes out of scope.
 
 ## 15.1 Using Box<T> to Point to Data on the Heap
 
 Box<T> is a pointer stored on the stack, that references data stored in the heap.
+
+Used when:
+1. have a type whose size is unknown at compile time and you want to use a value of that type in a context that requires an exact size
+2. large amount of data you want to transfer ownership but ensure the data won't be copied when you do so
+3. when you want to own a value and you care only only that it's a type that implements a particular trait rather than being of a specific type.
+
 
 ```rust
 let b = Box::new(5);
@@ -31,8 +37,8 @@ impl<T> Mybox<T> {
 impl<T> Deref for MyBox<T> {
     type Target = T;
 
-    fn deref(&self) -> &T{
-        &(self.0)
+    fn deref(&self) -> &Self::Target { // ->&T works as well
+        &(self.0) // &self.0 works as well
     }
 }
 ```
@@ -41,7 +47,28 @@ Rut runs `*(smart_pointer.deref())` under the scene. `deref()` returns a referen
 
 ### Implicit Deref Coercion
 
-Rust performs deref coercion on arguments (that implements the `Deref` Trait) to functions and methods.
+Rust performs deref coercion on arguments (that implement the `Deref` Trait) to functions and methods.
+
+Deref coercion can turn `&String` into `&str` because `String` implements the `Deref` trait such that it returns `&str`.
+
+```rust
+fn hello(name: &str) {
+    ...
+}
+
+// with deref coercion
+// &String -> &str
+let m = MyBox::new(String::from("hello"));
+
+// 1. pass a reference because we don't want to transfer ownership
+// 2. MyBox implements deref, (*m) => *(m.deref()) => *(&String) => *(&str)
+hello(&m); 
+
+
+// or without deref coercion
+hello(&(*m)[..]);
+
+```
 
 ### How Deref Coercion Interacts with Mutability
 
