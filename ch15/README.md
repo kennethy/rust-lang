@@ -268,3 +268,35 @@ fn main() {
 ### Preventing Reference Cycles with Weak<T>
 
 Create a weak reference by calling `Rc::downgrade` with a reference to `Rc<T>`. It returns a smart pointer typed to `Weak<T>`. The count is tracked via `weak_count` and the difference between `strong_count` is that `weak_count` doesn't need to be 0 for the `Rc<T>` instance to be cleaned up.
+
+```rust
+use std::cell::RefCell;
+use std::rc::{Rc, Weak};
+
+#[derive(Debug)]
+struct Node {
+    value: i32,
+    parent: RefCell<Weak<Node>>, // refers to parent, but does not own parent
+    children: RefCell<Vec<Rc<Node>>>,
+}
+
+fn main() {
+    let leaf = Rc::new(Node {
+        value: 3,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![]),
+    });
+
+    println!("leaf parent = {:?}", leaf.parent.borrow().upgrade()); // need to upgrade when using the pointer
+
+    let branch = Rc::new(Node {
+        value: 5,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![Rc::clone(&leaf)]),
+    });
+
+    *leaf.parent.borrow_mut() = Rc::downgrade(&branch); // downgrade when assign
+
+    println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
+}
+```
