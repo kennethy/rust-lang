@@ -1,5 +1,11 @@
 # Chapter 16. Fearless Concurrency
 
+The model where a language calls the operating system APIs to create threads is sometimes called `1:1` (one OS thread per one language thread).
+
+`M:N` model is a special implementation by programming languages where `M` green threads per `N` OS threads, and they may not necessarily be equal.
+
+Rust standard library provides an `1:1` implementation.
+
 ## Creating Threads
 
 ```rust
@@ -59,7 +65,7 @@ fn main() {
 }
 ```
 
-## 16.2 Using Message Passing to Transfer Data Between Threads
+## 16.2. Using Message Passing to Transfer Data Between Threads
 
 > Do not communicate by sharing memory; instead, share memory by communicating.
 
@@ -129,7 +135,7 @@ let tx1 = tx.clone();
 // both tx1 and tx can be used in threads to send values
 ```
 
-## 16.3 Shared State Concurrency
+## 16.3. Shared State Concurrency
 
 ### Using Mutexes
 
