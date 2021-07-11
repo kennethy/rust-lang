@@ -49,7 +49,7 @@ let handle = thread::spawn(move ||{ // <---- closure takes the ownership of v
 });
 ```
 
-This is to prevent `v` is always valid for the spawned thread that captured it.
+This is to ensure `v` is always valid for the spawned thread that captured it.
 
 ```rust
 fn main() {
@@ -98,7 +98,7 @@ fn main() {
 
 ### Channels and Ownerships
 
-`send()` takes ownership of the passed variables. This is to ensure that once it's sent, the thread would not be able to use it.
+`send()` takes ownership of the passed variables. This is to ensure that once it's sent, the thread would not be able to use it. The receiver takes the ownership when the variables are moved.
 
 ### Sending Multiple Values and Seeing the Receiver Waiting
 
@@ -130,7 +130,20 @@ for received in rx {
 
 ```rust
 let (tx, rx) = mpsc::channel();
+
 let tx1 = tx.clone();
+thread::spawn(move || {
+    tx1.send(...).unwrap();
+});
+
+thread::spawn(move || {
+    // ...
+    tx.send(...).unwrap();
+});
+
+for received in rx {
+    // ...
+}
 
 // both tx1 and tx can be used in threads to send values
 ```
