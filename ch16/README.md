@@ -74,7 +74,7 @@ fn main() {
 A channel has two halves, a transmitter and a receiver. `mspc` stands for multiple producer, single consumer.
 
 ```rust
-use std::sync::mspc;
+use std::sync::mpsc;
 use std::thread;
 
 fn main() {
