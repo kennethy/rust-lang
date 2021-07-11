@@ -167,11 +167,9 @@ fn main() {
 }
 ```
 
-`lock()` blocks the current thread until the lock is obtained.
+`lock()` blocks the current thread until the lock is obtained. It returns a smart pointer `MutexGuard`, wrapped in a `LockResult` that we handled with the call to `unwrap`. `MutexGuard` implements the `Drop` trait and will release the lock once it becomes out of scope.
 
-`unwrap()` is called in case the other thread holding the lock panics. This ensures the current thread will panic as well.
-
-Both calls are called in an inner scope because `lock()` returns a smart pointer `MutexGuard` then will release the lock once it becomes out of scope.
+`unwrap()` is called in case the other thread holding the lock panics. This ensures the current thread will panic as well. It also unwraps the `LockResult`. `Mutex<T>` also provides interior mutability similar to the `Cell` family.
 
 ### Multiple Ownership with Multiple Threads
 
@@ -181,13 +179,14 @@ use std::thread;
 
 fn main() {
     // Arc is a thread-safe alternative to Rc. `a` stands for atomic.
+    // it's for multi-thread purposes and it comes with a performance cost
     let counter = Arc::new(Mutex::new(0));
-    let mut handles = vec![];
+    let mut handles = vec![]; // not used in another thread, so no need to use `Arc`
 
     for _ in 0..10 {
         let counter = Arc::clone(&counter);
         let handle = thread::spawn(move || {
-            let mut num = counter.lock().unwrap();
+            let mut num = counter.lock().unwrap(); // num is a mutable reference to the value wrapped by the Mutex
             *num += 1;
         });
 
@@ -198,6 +197,20 @@ fn main() {
         handle.join().unwrap();
     }
 
-    println!("result: {}", *counter.lock.unwrap());
+    println!("result: {}", *counter.lock().unwrap()); // counter.lock().unwrap() works as well
 }
 ```
+
+## 16.4. Extensible Concurrency with the `std::marker::Sync` and `std::marker::Send` trait
+
+### `Send` trait
+
+Type that implements `Send` indicate that the ownership of itself can be transferred between threads. Any type composed entirely of `Send` types is automatically marked as `Send` as well.
+
+### `Sync` trait
+
+Values of type that impleemnts `Sync` can be referenced from multiple threads.
+
+Primitives are `Sync`, and types composed entirely of `Sync` are also `Sync` automatically.
+
+Implementing both traits manually is unsafe.
