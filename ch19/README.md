@@ -129,3 +129,17 @@ fn main() {
     }
 }
 ```
+
+### Implementing an Unsafe Trait
+
+A trait is unsafe when at least one of its method has some invariant that the compiler can't verify.
+
+```rust
+unsafe trait Foo {
+    // ...
+}
+
+unsafe impl Foo for i32 {
+    // ...
+}
+```
