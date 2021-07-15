@@ -143,3 +143,125 @@ unsafe impl Foo for i32 {
     // ...
 }
 ```
+
+## 19.2. Advanced Traits
+
+### Associated Types
+
+Associated types seem similar to that of generics, but we use associated types to avoid annotating the types multiple times.
+
+They connect a type placeholder with a trait such that the trait method definitions can use these placeholder types in their signatures.
+
+It allows us to define traits that use some types without needing to know exactly what those types are until the trait is implemented.
+
+```rust
+pub trait Iterator {
+    type Item;
+
+    fn next(&mut self) -> Option<Self::Item>;
+}
+```
+
+### Default Generic Type Parameters and Operator Overloading
+
+Operators listed in `std::ops` can be overloaded.
+
+```rust
+use std::ops::Add;
+
+#[derive(Debug, PartialEq)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+impl Add for Point {
+    type Output = Point;
+
+    fn add(self, other: Point) -> Point {
+        Point {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+```
+
+Add Trait with default generic type. `Self` is the type that implements the trait.
+
+```rust
+pub trait Add<Rhs=Self> { // <--- syntax is called default type parameters
+    type Output;
+
+    fn add(self, rhs: Rhs) -> Self::Output;
+}
+```
+
+If we want to support `Rhs` to be of some other type:
+
+```rust
+use std::ops::Add;
+
+struct Millimeters(u32);
+struct Meters(u32);
+
+impl Add<Meters> for Millimeters {
+    type Output = Millimeters
+
+    fn add(self, other: Meters) -> Millimeters {
+        Millimeters(self.0 + (other.0 * 1000))
+    }
+}
+```
+
+### Fully Qualified Syntax for Disambiguation
+
+When a type implements multiple traits, and the traits all have a method that has a same name.
+
+```rust
+
+fn main() {
+    let person = Human;
+    Pilot::fly(&person);
+    Wizard::fly(&person);
+    person.fly(); // or Human::fly(&person);
+}
+```
+
+To disambiguate associated functions (static methods on the trait, methods that do not use self):
+
+```rust
+fn main() {
+    println!("{}", SomeType::foo());
+    println!("{}", <SomeType as AnotherType>::foo());
+}
+```
+
+### Using Supertraits To Require One Trait's Functionaity with Another Trait
+
+```rust
+use std::fmt;
+
+trait ThisTrait: ThatTrait {
+    // ...
+}
+```
+
+
+### Use Newtype Pattern to implement External traits on External types
+
+Due to the orphan rule, we are only allowed to implement a trait on a type as long as the trait or the type is local to our crate.
+
+To come around this restriction, we can declare a struct (that is local to our crate) to wrap around the external type.
+
+```rust
+use std::fmt;
+
+struct Wrapper(Vec<String>);
+
+impl fmt::Display for Wrapper {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "[{}]", self.0.join(", "))
+    }
+}
+```
