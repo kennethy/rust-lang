@@ -265,3 +265,58 @@ impl fmt::Display for Wrapper {
     }
 }
 ```
+
+## 19.3. Advanced Types
+
+### Creating Type Synonyms with Type Aliases
+
+```rust
+type Kilometers = i32;
+
+let x: i32 = 5;
+let y: Kilometers = 5;
+
+println!("x + y = {}", x + y);
+```
+
+### The Never Type that Never Returns
+
+`!` is the `Never` type, and functions that return never are called *diverging functions*.
+
+```rust
+fn bar() -> ! {
+    // ...
+}
+```
+
+Previously, we were able to use `continue` even though match arms require all branches to return the same type.
+
+```rust
+let guess: u32 = match guess.trim().parse() {
+    Ok(num) => num,
+    Err(_) => continue,
+};
+```
+
+This worked because `continue` has a `!` value, and expressions of type `!` can be coerced into any other type.
+
+`panic!` returns `!` which is why we were able to implement `unwrap()` on `Option<T>`.
+
+```rust
+impl<T> Option<T> {
+    pub fn unwrap(self) -> T {
+        match self {
+            Some(val) => val,
+            None => panic!("called `Option::unwrap()` on a `None` value"),
+        }
+    }
+}
+```
+
+Never ending `loop` also returns `!`.
+
+```rust
+loop {
+    println!("never ending);
+}
+```
