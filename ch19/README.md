@@ -320,3 +320,38 @@ loop {
     println!("never ending);
 }
 ```
+
+### Dynamically Sized Types and the `Sized` Trait
+
+Rust need to know certain details like how much space to allocate for a value of a particular type.
+
+Dynamically Sized Types (also known as DSTs) or unsized types allow us to use values whose size can only be known at runtime.
+
+`&str` represents two values, the address of the `str` and its length.
+
+The golden rule of dynaically sized types is that we must always put values of dynamically sized types behind a pointer of some kind.
+
+Every trait is a dynamically sized type when can refer to by using the name of the trait. We must put trait objects behind a pointer in order to use them, like `&dyn Trait`, or `Box<dyn SomeTrait>`.
+
+Rust has a special trait `Sized` to determine whether a type's size is known at compile time. It is automatically implemented for everything whose size is known at compile time.
+
+Rust implicitly adds a bound on `Sized` to every generic function.
+
+```rust
+fn generic<T>(t: T) {}
+```
+
+is equivalent to:
+
+```rust
+fn generic<T: Sized>(t: T) {}
+```
+
+Generic functions only work on types that have a known size at compile time, relax this restriction with:
+
+```rust
+fn generic<T: ?Sized>(t: &T) {}
+```
+
+
+`?Sized` means `T` may or may not be `Sized`, and since the `T` might not be, we need to put them behind a pointer, so we use `&T` instead.
