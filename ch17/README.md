@@ -65,7 +65,7 @@ impl Draw for Button {
 
 `monomorphization` is when the compiler generates the nongeneric implementation of functions and methods for each concrete type. The result of it is doing `static dispatch`, which means the compiler knows what method you are calling at compile time.
 
-`dynamic dispatch` is used when using trait objects. The compiler doesn't know all the types that might be used so Rust uses teh pointers inside the trait objects to determine which method to call (runtime cost).
+`dynamic dispatch` is used when using trait objects. The compiler doesn't know all the types that might be used so Rust uses the pointers inside the trait objects to determine which method to call (runtime cost).
 
 **Object Safety Is Required for Trait Objects**
 

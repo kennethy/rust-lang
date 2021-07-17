@@ -355,3 +355,51 @@ fn generic<T: ?Sized>(t: &T) {}
 
 
 `?Sized` means `T` may or may not be `Sized`, and since the `T` might not be, we need to put them behind a pointer, so we use `&T` instead.
+
+## 19.4. Advanced Functions and Closures
+
+### Function Pointers
+
+Regular functions can passed to functions. Functions are typed with `fn`. The type implements all three of closure traits (`Fn`, `FnMut`, `FnOnce`), so it can be used for a function that expects a closure.
+
+```rust
+fn add_one(x: i32) -> i32 {
+    x + 1
+}
+
+fn do_twice(f: fn(i32) -> i32, arg: i32) -> i32 {
+    f(arg) + f(arg)
+}
+
+fn main() {
+    let answer = do_twice(add_one, 5);
+    // ...
+}
+```
+
+```rust
+let list_of_strings: Vec<String> = list_of_numbers.iter().map(|i| i.to_string()).collect();
+
+// or
+let list_of_strings: Vec<String> = list_of_numbers.iter().map(ToString::to_string).collect();
+```
+
+Enum values are be initialized 
+```rust
+enum Status {
+    Value(u32), // this is actually a initializer function, Status::Value
+    Stop,
+}
+
+let list_of_statuses: Vec<Status> = (0u32..20).map(Status::Value).collect();
+```
+
+### Returning Closures
+
+Closures are represented by traits, so they can't be returned directly. Rust doesn't know how much space it needs to allocate for the closure.
+
+```rust
+fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
+    Box::new(|x| x + 1)
+}
+```
