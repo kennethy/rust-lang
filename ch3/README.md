@@ -34,3 +34,38 @@ let x = x * 2;
 // `let` creates a new variable, so we can change the type of the value and reuse the same name
 let x = "string now";
 ```
+
+## 3.2. Data Types
+
+Rust is a statically typed language, so it must know the types of all variables at compile time.
+
+### Scalar Types
+
+A scalar type represents a single value. Rust has four primary scalar types:
+- integers
+- floating-point numbers
+- booleans
+- characters
+
+**Integer Types**
+
+| length | signed | unsigned |
+|--------|--------|----------|
+| 8-bit | i8 | u8 |
+| 16-bit | i16 | u16 |
+| 32-bit | i32 | u32 |
+| 64-bit | i64 | u64 |
+| 128-bit | i128 | u128 |
+| arch | isize | usize |
+
+Signed numbers are stored using two's complement representation.
+
+The `isize` and `usize` type depend on the architecture of the computer the program is running on. Integer types default to `i32` and the primary situation you'd use `isize` or `usize` is when indexing some sort of collection.
+
+| number literals | example |
+|-----------------|---------|
+| decimal | 98_222 |
+| hex | 0xff |
+| octal | 0o77 |
+| binary | 0b1111_0000 |
+| byte (`u8` only) | b'A' |
