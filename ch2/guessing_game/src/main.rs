@@ -5,13 +5,13 @@ use std::io;
 fn main() {
     println!("Guess the number!");
 
+    // randomly generates a number from 1 to 100
     let secret_number = rand::thread_rng().gen_range(1, 101);
-
 
     loop {
         println!("Please input your guess!");
 
-        // rust variables (including references) by immutable by default
+        // rust variables (including references) immutable by default
         // use `mut` special keyword to indicate that it's mutable
         let mut guess = String::new();
 
