@@ -172,3 +172,80 @@ fn five () -> i32 {
     5 // returns 5
 }
 ```
+
+## 3.5. Control Flow
+
+### `if` expressions
+
+The condition must be a `bool`.
+
+```rust
+if number == 1 {
+    // ...
+} else if number == 2 {
+    // ...
+} else {
+    // ...
+}
+```
+
+### Using `if` with `let`
+
+```rust
+let number = if true { 5 } else { 6 };
+```
+
+### Repetition with Loops
+
+**Repeating with `loop`**
+
+```rust
+loop {
+    println!("again")
+}
+```
+
+Loop can be labeled.
+
+```rust
+'outer: loop {
+    loop {
+        // ...
+        break 'outer
+    }
+}
+```
+
+**Returning values from loops**
+
+```rust
+let mut counter = 0;
+
+let result = loop {
+    counter += 1
+
+    if counter == 10 {
+        break counter * 2;
+    }
+}
+```
+
+**Conditional Loops with `while`**
+
+```rust
+let mut number = 3;
+
+while number != 0 {
+    number -= 1
+}
+```
+
+**Looping through a collection with `for`**
+
+```rust
+let a = [1, 2, 3];
+
+for number in (1..4).rev() {
+    println!("{}", element);
+}
+```
