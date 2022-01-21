@@ -137,3 +137,38 @@ let a = [3, 3, 3, 3, 3];
 // print the array
 println!("{:?}", a);
 ```
+
+## 3.3. Functions
+
+Rust doesn't care wher eyou define your functions, only that they are defined somewhere.
+
+```rust
+fn foo() {
+    // ...
+}
+```
+
+### Parameters
+
+In function signatures, the type of each parameter must be declared.
+
+### Statements and Expressions
+
+Statements are instructions that perform some action and do not return a value. Expressions evaluate to a result value.
+
+```rust
+let y = { // a new scope block created with curly brackets is an expression
+    let x = 3;
+    x + 1
+}
+```
+
+### Functions with Return Values
+
+Type of return value is declared.
+
+```rust
+fn five () -> i32 {
+    5 // returns 5
+}
+```
