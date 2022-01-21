@@ -1,5 +1,17 @@
 # Chapter 4. Understanding Ownership
 
+## 4.1. What is Ownership?
+
+In Rust, memory is managed through a system of ownership with a set rule rules that the compiler checks.
+
+## The Stack and the Heap
+
+Stacks follow a last in, first out order. All data stored on the stack must have a known, fixed size.
+
+Data with unknown size is stored on the heap. The memory allocator finds an empty spot in the heap that is big enough, marks it as being in use, and returns a pointer, which is the address of that location.
+
+Pushing to the stack is faster than allocating on the heap because the allocator never has to search for a place to store new data. The location is always at the top of the stack.
+
 **Ownership Rules**
 1. Each value in Rust has a variable that's called *owner.*
 2. There can only be one owner at a time.
