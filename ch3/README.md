@@ -69,3 +69,71 @@ The `isize` and `usize` type depend on the architecture of the computer the prog
 | octal | 0o77 |
 | binary | 0b1111_0000 |
 | byte (`u8` only) | b'A' |
+
+Integer overflow is not checked when the program is compiled with the `--release` flag. Rust performs two's complment wrapping.
+
+**Floating-Point Types**
+
+```rust
+let x = 2.0; // f64 by default
+let y : f32 = 3.0 // f32
+```
+
+**The Boolean Type**
+
+Booleans are one byte in size.
+
+```rust
+let t = true;
+let f : bool = false;
+```
+
+**The Character Type**
+
+Rust's `char` type is four bytes in size and represents a Unicode Scalar Value.
+
+```rust
+let c = 'z'
+let z = 'ℤ'
+let cat = '😻';
+```
+
+### Compound Types
+
+Compound types group multiple values into one type. Two primitive compound types are tuples and arrays.
+
+**Tuple**
+
+Tuples have a fixed length: once delcared, they cannot grow/shrink in size.
+
+```rust
+let tup: (i32, f64, u8) = (500, 6.4, 1);
+
+let (x, y, z) = tup; // destructuring
+println!("The value of y is : {}", y);
+
+// or with dot notation
+let first = tup.0;
+```
+
+The empty tuple `()` is has a  `unit type` and the value is called the `unit value`.
+
+**The Array Type**
+
+Arrays are useful when you want the data to be allocated on the stack rather than the heap. They are more useful when you know the number of elements will not change.
+
+```rust
+let a: [i32; 5] = [1, 2, 3, 4, 5];
+
+// or
+let a = [1, 2, 3, 4, 5];
+
+// shorthand
+let a = [3; 5];
+
+// for
+let a = [3, 3, 3, 3, 3];
+
+// print the array
+println!("{:?}", a);
+```
