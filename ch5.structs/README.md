@@ -1,6 +1,6 @@
 # Chapter 5. Using Structs to Structure Related Data
 
-# Declaration
+## 5.1. Declaration and Instantiation
 
 ```rust
 struct User {
@@ -11,7 +11,7 @@ struct User {
 }
 ```
 
-# Initialization
+### Initialization
 
 ```rust
 let user1 = User {
@@ -30,7 +30,11 @@ fn build_user(email: String, username: String) -> User {
         sign_in_count: 0
     }
 }
+```
 
+### Creating Instances from Other Instances
+
+```rust
 // copy with rest, and mutable user
 let mut user2 = {
     email: String::from("test@test.com"),
@@ -43,7 +47,11 @@ let mut user2 = {
 user2.email = String::from("updated@test.com"); // allowed because `mut`
 ```
 
-# Tuple Structs
+### Tuple Structs
+
+Tuple structs have the added meaning the struct name provides but don't have names associated with their fields; they just have the types of the fields.
+
+Each struct you define is its own type.
 
 ```rust
 struct Color(i32, i32, i32);
@@ -56,7 +64,18 @@ let origin = Point(0, 0, 0);
 println!("{}", black.0);
 ```
 
-# Derived Traits
+### Unit-Like Structs Without Any Fields
+
+```rust
+struct AlwaysEqual;
+let subject = AlwaysEqual;
+```
+
+### Ownership of Struct Data
+
+References are allowed in a struct but it would requires the use of `lifetimes`.
+
+### Derived Traits
 
 ```rust
 #[derive(Debug)] // make `Rectangle` printablewith {:?}
