@@ -75,10 +75,27 @@ let subject = AlwaysEqual;
 
 References are allowed in a struct but it would requires the use of `lifetimes`.
 
-### Derived Traits
+## 5.2. Struct Examples
 
 ```rust
-#[derive(Debug)] // make `Rectangle` printablewith {:?}
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn area(rect: &Rectangle) -> u32 {
+    rect.width * rect.height
+}
+```
+
+### Derived Traits
+
+Using `{}` in `println!` for structs require them to implement `std::fmt::Display`.
+
+Use `{:?}` for smaller structs and `{:#?}` for pretty-print.
+
+```rust
+#[derive(Debug)] // make `Rectangle` printable with {:?}
 struct Rectangle {
     width: u32,
     height: u32,
@@ -88,7 +105,24 @@ println!("{:?}", ret); // print ret and its field values
 println!("{:#?}", ret); // pretty prints ret
 ```
 
-# Defining Methods
+### `dbg!`
+
+The method takes the ownership of the object we are passing into, display where the value as a result of the expression, where it expresses, and returns the ownership.
+
+```rust
+let rect = Rectangle {
+    width: dbg!(30 * foo),
+    height: 100
+}
+
+dbg!(&rect) // `borrow` since we don't want dbg! to own `rect`
+```
+
+## 5.3. Method Syntax
+
+Within an `impl` block, the type `Self` is an alias for the type that the `impl` block is for.
+
+`&self` is a shorthand for `self: &Self`.
 
 ```rust
 impl Rectangle {
@@ -101,7 +135,21 @@ impl Rectangle {
 }
 ```
 
-# Associated Functions
+### `->` opreator
+
+Rust uses `automatic referencing and dereferencing` in place of the `->` operator. `&`, `&mut`, or `*` will automatically be added so the `object` will match the signature of the method (receiver and name of the method).
+
+```rust
+p1.distance(&p2);
+
+// is equivalent to
+
+(&p1).distance(&p2);
+```
+
+### Associated Functions
+
+Associated functions that don't have `self` are allowed.
 
 ```rust
 impl Rectangle {
@@ -112,9 +160,12 @@ impl Rectangle {
         }
     }
 }
-```
 
-then call
-```rust
+
+// then call
 Rectangle::square(50);
 ```
+
+### Multiple `impl` Blocks
+
+Multiple `impl` block is valid syntax.
