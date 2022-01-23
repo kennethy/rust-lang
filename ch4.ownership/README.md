@@ -17,6 +17,27 @@ Pushing to the stack is faster than allocating on the heap because the allocator
 2. There can only be one owner at a time.
 3. When the owner goes out of scope, the value will be dropped (via Drop).
 
+## Variable Scope
+
+A variable is no longer valid when it is out of scope.
+
+```rust
+{ // s is not valid since it hasn't been declared yet
+    let s = "hello";
+    // do stuff with s
+} // this scope is not over, and s no longer valid
+```
+
+## The `String` Type
+
+String literals have a fixed size and will be put onto the stack. Use the `String::from(...)` to allocate the string on the heap.
+
+## Memory and Allocation
+
+In Rust, the memory is automatically returned once the variable that owns it goes out of scope.
+
+The special  `drop` funtion is called automatically, which would deallocate the memory.
+
 **Move**
 
 ```rust
@@ -33,6 +54,10 @@ let x2 = x1.clone(); // performs deep copy
 println!("x1 = {}, x2 = {}", x1, x2);
 ```
 
+Types such as intgers that have a known size at compile time are stored entirely on the stack, so copies of the actual values are quick to make. Therefore, stack-only data will not be invalidated.
+
+Implement the `Copy` trait to ensure a variable is still valid after assignment to another variable. This is allowed only on variables that hasn't implemented the `Drop` trait. In general, nothing that reuqires allocation or is some form of resource can implement `Copy`.
+
 **Copy**
 
 Simple scalar values and nothing that requires allocation can implement `Copy`, to prevent the `move` behaviour.
@@ -44,21 +69,31 @@ let y = x; // no ownership transfer, because x, i32, is stored on stack
 println!("x = {}, y = {}", x, y);
 ```
 
-**Ownership Transfer**
+## Ownership and Functions
+
+Passing a variable to a function will move or copy, just as assignment does.
 
 ```rust
 let s = String::from("hello");
-takes_ownership(s); // `move`: ownership transferred to scope of fn
+takes_ownership(s); // `move`: ownership transferred to scope of fn, s is no longer valid here
 
 let x = 5;
 makes_copy(5); // `copy`: is called since x i32 is copy
+```
 
-let s1 = gives_ownershop(); // whatever is returned from fn
+## Return Values and Scope
+
+Returning values can also transfer ownership.
+
+```rust
+let s1 = gives_ownership(); // whatever is returned from fn
 let s2 = String::from("hello");
 let s3 = takes_and_gives_back(s2); // s2 is moved
 ```
 
 **References**
+
+References are used so that values can be used without transferring ownership.
 
 ```rust
 let s1 = String::from("hello world");
