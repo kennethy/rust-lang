@@ -1,13 +1,20 @@
 # Chapter 7. Packages, Crates, and Modules
 
-The crate root is a source file that the Rust compiler starts from and makes up the root module. A package contains a `Cargo.toml` and is formed by one or more crates. A package must contain zero or one library crates.
+## 7.1. Packages and Crates
 
-## Create a lib cargo with
+The crate root is a source file that the Rust compiler starts from and makes up the root module.
+
+A package contains a `Cargo.toml` and is formed by one or more crates. A package must contain zero or one library crates.
+
+A package created by the following command:
+
 ```rust
-cargo new --lib [PACKAGE_NAME]
+cargo new --lib [PACKAGE_NAME] // creates a binary crate with the --lib option
 ```
 
-## Declaration
+## 7.2. Defining Modules to Control Scope and Privacy
+
+Modules let us organize code within a crate into groups for readability and easy reuse. It also controls the visibility of the items within the crate.
 
 ```rust
 // src/lib.rs
@@ -18,22 +25,32 @@ mod module_name {
 }
 ```
 
-## Referencing Functions within modules
+Contents of either `src/main.rs` or `src/lib.rs`  form a module named `crate` at the root of the *module tree*.
 
-By default, all items (functions, methods, structs, enums, modules, and constants) are private. Silbings have access to each other. Child module can refer to modules defined in the parent modules.
+```
+crate
+  - module_name
+    - sub_module
+      - foo
+```
 
+## 7.3. Referencing Functions within modules
+
+A path is used to let Rust know where to find an item in a module tree. It can take two forms:
+
+- Absolute path starts from the crate root.
+- Relative path starts from current module and uses `self`, `super`, or an identifier in the current module.
 
 ```rust
 mod front_of_house {
-    mod hosting {
-        fn add_to_waitlist() {}
+    pub mod hosting {
+        pub fn add_to_waitlist() {}
     }
 }
 
 // `pub` keyword is juse to make a function public
 pub fn eat_at_restaurant() {
     // Absolute path
-    // crate is called the crate root
     crate::front_of_house::hosting::add_to_waitlist();
 
     // Relative path
@@ -41,23 +58,32 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-## Relative path with super
+### Exposing Paths with the `pub` Keyword
+
+By default, all items (functions, methods, structs, enums, modules, and constants) are private. Silbing modules have access to each other. Child module can refer to modules defined in the parent modules.
+
+Making the module public doesn't make its content public. The `pub` keyword on a module only lets code in its ancestor modules refer to it.
+
+### Relative path with `super`
+
+Relative paths that begin in the parent module can be constructed using `super` at the start of the path (similar with the `..` syntax in a filesystem).
+
 ```rust
 fn serve_order() {}
 
 mod back_of_house {
     fn fix_incorrect_order() {
         cook_order();
-        super::serve_order(); // think of super as '..', to go to parent
+        super::serve_order(); // think of super as '..', to go to parent module of `back_of_house`
     }
 
     fn cook_order() {}
 }
 ```
 
-## Pub Structs
+### Making Structs and Enums Public
 
-All fields in a struct are private by default.
+All fields in a struct are private by default. We can make each field public or not on a case-by-case basis.
 
 ```rust
 mod back_of_house {
@@ -67,6 +93,8 @@ mod back_of_house {
     }
 
     impl Breakfast {
+        // because `seasonal_fruit` is private, we need to provide a
+        // public associated function that constructs an instance of `Breakfast`.
         pub fn summer(toast: &str) -> Breakfast {
             Breakfast {
                 toast: String::from(toast),
@@ -89,9 +117,18 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-## Pub Enums
+### Pub Enums
 
 If an enum is public, then so are its variants.
+
+```rust
+mod back_of_house {
+    pub enum Appetizer {
+        Soup,
+        Salad,
+    }
+}
+```
 
 ## 'use' keyword
 
