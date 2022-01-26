@@ -130,9 +130,9 @@ mod back_of_house {
 }
 ```
 
-## 'use' keyword
+## 7.4. 'use' Keyword
 
-The idiomatic way is to `use` the path up to the module level when bringing in functions. Use the full path when bringing in structs, enums, and other items.
+The idiomatic way is to `use` the path up to the module level when bringing in functions. Use the full path when bringing in structs, enums, and other items (if they don't have conflicting names).
 
 ```rust
 mod front_of_house {
@@ -154,7 +154,7 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-## 'as' keyword
+### 'as' keyword
 
 Rename method with 'as' keyword.
 
@@ -171,7 +171,7 @@ fn function2() -> IoResult<()> {
 }
 ```
 
-## Re-export
+### Re-export with `pub use`
 
 Use `pub use` to allow external code to use a function that was brought into the current scope
 
@@ -191,7 +191,15 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-## Nested Paths
+### Using external packages
+
+External packages are added in `Cargo.toml` and brought into scope using:
+
+```rust
+use foo::Bar;
+```
+
+### Nested Paths
 
 ```rust
 // from
@@ -200,7 +208,6 @@ use std::io;
 
 // to
 use std::{cmp::Ordering, io};
-
 ```
 
 or
@@ -211,16 +218,18 @@ use std::io;
 use std::io::Write;
 
 // to
-use std::io::{self, Write};
+use std::io::{self, Write}; // std::io and std::io::Write are brought into scope
 ```
 
-## Glob
+### Glob
+
+If we want to bring all public items defined in a path into scope, use the `*` operator (glob).
 
 ```rust
 use std::collections::*;
 ```
 
-## Separating modules into different files
+## 7.5. Separating modules into different files
 
 
 ```rust
