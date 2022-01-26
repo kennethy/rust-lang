@@ -96,48 +96,62 @@ let row = vec![
 ];
 ```
 
-## Strings
+## 8.2. Storing UTF-8 Encoded Text with Strings
+
+The `String` type is a growable, mutable, owned, UTF-8 encoded string type. String slices are of `str` type, and it's usually seen in its borrowed form `&str`.
 
 ### Declaration
 ```rust
+let mut s0 = String::new();
+
 let s1 = String::from("hello world");
 
 // or 
-let s2 = "hello world".to_string()
+let s2 = "hello world".to_string();
 ```
 
 ### Update
+
+A `String` can grow in size and its content can change.
+
 ```rust
 let mut s = "hello ";
 
 // push a string
-s.push_str("world");
+s.push_str("world"); // push_str does not take ownership
 
 // or push a char
-s.push('a');
+s.push('a'); // push does not take ownership
 ```
 
 ### Concat
 
-String's add (+ operator) fn takes ownership.
+String's add operator (+) fn takes ownership.
 
 ```rust
 let s1 = String::from("tic");
 let s2 = String::from("tac");
 let s3 = String::from("toe");
 
-let s = s1 + "-" + &s2 + "-" + &s3;
+let s = s1 + "-" + &s2 + "-" + &s3; // s1 has been moved and cannot be used after
 
 // or
 let s = format!("{}-{}-{}", s1, s2, s3); // does not take ownership
 ```
 
+The compiler is able to coerce `&String` argument into a `&str` with the help of *deref coercion*, which turns `&s2` (of `String` type) into `&s2[..]`.
+
+For more complicated string concatenation, use the `format!` macro. The macro also doesn't take ownership of any of its parameters.
+
 ### Iteration
 
 Indexing on strings are not allowed as it would not make sense for Unicode scalar values. Each unit may take more than a byte.
 
+
+Use `chars()` if you want to iterate on individual Unicode scalar values.
+
 ```rust
-for c in “我喜欢你”.chars() {
+for c in “我喜欢你”.chars()
     println!("{}", c);
 }
 
@@ -146,6 +160,10 @@ for c in "hello world".bytes() {
     println!("{}", b);
 }
 ```
+
+**Internal Representation**
+
+A `String` is a wrapper over a `Vec<u8>`.
 
 ## HashMap
 
