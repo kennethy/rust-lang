@@ -1,6 +1,8 @@
 # Chapter 9. Error Handling
 
-## Unrecoverable Errors
+## 9.1. `panic!`
+
+By default when `panic!` executes, the program prints a failure message, unwinds and clean up the stack (freeing memory from each functions on the stack), and then quit.
 
 ```rust
 fn main() {
@@ -8,22 +10,23 @@ fn main() {
 }
 ```
 
-Rust programs can be configured to abort when panicking
+Rust programs can be configured to abort when panicking. This means there will be no cleanup by Rust, and it's up to the operating system to free the memory.
 
-```rust
+```toml
 // Cargo.toml
 [profile.release]
 panic = 'abort'
 ```
 
 Show backtrace by running rust programs with `RUST_BACKTRACE`. Debug symbols are enabled by default when `cargo build` or `cargo run` without the `--release` flag.
-```
+
+```zsh
 RUST_BACKTRACE=1 cargo run
 ```
 
-## Recoverable Errors
+## 9.2. Recoverable Errors with `Result`
 
-`Result` enum, in which T represents the type of the value returned in the success case, and E represents the type of error returned in the failure case.
+`Result<T, E>` enum, in which T represents the type of the value returned in the success case, and E represents the type of error returned in the failure case. Similar to `Option` enum, the `Result` enum and its variants are brought into scope by the prelude, so we do not need to specify `Result::` prefix.
 
 ```rust
 enum Result<T, E> {
@@ -45,7 +48,7 @@ let f = match f {
 
 ### Errors Matching
 
-Errors matching with `unwrap_or_else` with closure.
+Using `match` can quickly bloat up the code. We can use `unwrap_or_else` with a closure to make the code more concise.
 
 ```rust
 use std::fs::File;
@@ -66,13 +69,13 @@ fn main() {
 
 ### Shortcuts
 
-`unwrap()`  returns the value in the `Ok`, and calls `panic!` for us on `Err`.
+`unwrap()` returns the value in the `Ok`, and calls `panic!` for us on `Err`.
 
 ```rust
 let f = File::open("hello.txt").unwrap();
 ```
 
-`expect(msg: string)`  calls panic! 
+`expect(msg: string)` similar to `unwrap()` except it allows us to specify a message that will be passed to `panic!`.
 
 ```rust
 let f = File::open("hello.txt").expect("Panic Message");
@@ -108,6 +111,12 @@ fn read_username_from_file() -> Result<String, io::Error> {
 
 The `?` operator converts the error type to ensure it matches the E type specified in the fn return `Result` type. It also early returns when there's an `Err` case.
 
+Errors that have the `?` operator called on them go through the `from` function, defined in the `From` trait in the standard library, which is used to convert errors from one type into another.
+
+`?` works automatically when there's an `impl From<OtherError> for ReturnedError` to define the conversion in the trait's `from` function.
+
+The operator can only be used in functions that actually return a `Result` or `Option`.
+
 ```rust
 fn read_username_from_file() -> Result<String, io::Error> {
     let mut s = String::new();
@@ -117,7 +126,8 @@ fn read_username_from_file() -> Result<String, io::Error> {
     Ok(s)
 ```
 
-Rust provides a function for this
+Rust provides a function for this:
+
 ```rust
 use std::fs::File;
 
