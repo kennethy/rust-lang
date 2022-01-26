@@ -165,11 +165,14 @@ for c in "hello world".bytes() {
 
 A `String` is a wrapper over a `Vec<u8>`.
 
-## HashMap
+## 8.3. Hash Maps
+
+The type `HashMap<K, V>` stores a mapping of keys of type `K` to values of type `V`.
 
 ### Declaration
 
 All keys must be the same type, and all values must be the same type.
+
 ```rust
 use std::collections::HashMap;
 
@@ -200,34 +203,73 @@ map.insert(field_name, field_value);
 // field_name and field_value are invalid at this point
 ```
 
-### Update
+### Hash Maps and Ownership
 
-Overwrite
+For types that implement `Copy` trait, like `i32`, the values are copied into the hash map.
+
+For owned values like `String`, the values will be moved and the hash map will be the owner of those values.
+
 ```rust
-let mut scores = HashMap::new();
-scores.insert(String::from("Blue"), 10);
-scores.insert(String::from("Blue"), 25);
+use std::collections::HashMap;
+
+let a = String::from("A");
+let b = String::from("B");
+
+let mut map = HashMap::new();
+map.insert(a, b)
+// a and b will no longer be valid since they are moved
 ```
 
-Insert if the key does not already exist
+### Read
+
+Use `get()` to read the value associated to the key. It returns an `Option<&V>`. We don't want `get()` to take ownership of the key, so a reference of the key is passed.
+
 ```rust
-let mut scores = HashMap::new();
-scores.entry(String::from("key")).or_insert(100);
+let value = map.get(&key);
 ```
 
-Update based on old value
-```rust
-let mut scores = HashMap::new();
-scores.insert(String::from("key"), 123);
-
-let entry = score.entry(String::from("key")).or_insert(0);
-*entry += 1;
-```
-
-### Iteration
+We can also print the entries in the map.
 
 ```rust
 for (key, value) in &m {
     println!("key: {} val: {}", key, value);
 }
 ```
+
+### Update
+
+**Overwriting a value by using identical keys**
+
+```rust
+let mut scores = HashMap::new();
+scores.insert(String::from("Blue"), 10);
+scores.insert(String::from("Blue"), 25);
+```
+
+**Insert if the key does not already exist**
+
+`entry()` returns a mutable reference (`&mut V`) that allows us to update the entry in the hash map.
+
+```rust
+let mut scores = HashMap::new();
+scores.entry(String::from("key")).or_insert(100);
+```
+
+**Update based on old value**
+
+```rust
+let text = "hello world wonder world";
+
+let mut m = HashMap::new();
+
+for word in text.split_whitespace() {
+    let count = map.entry(word).or_insert(0);
+    *count += 1;
+}
+```
+
+### Hashing Functions
+
+By default, `HashMap` uses the `SipHash` hashing function.
+
+To switch to another hashing function, a hasher that implements the `BuildHasher` trait needs to be specified.
