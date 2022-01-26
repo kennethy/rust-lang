@@ -231,10 +231,11 @@ use std::collections::*;
 
 ## 7.5. Separating modules into different files
 
+Using a semicolon after `mod` rather than using a block tells Rust to load the contents of the module from another file with the same name as the module.
 
 ```rust
 // src/lib.rs
-mod front_of_house; // loads the content of the module from another file with the same name as the module
+mod front_of_house;
 
 pub use crate::front_of_house::hosting;
 
@@ -243,12 +244,12 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-
 ```rust
 // src/front_of_house.rs
 pub mod hosting; // declares a hosting module
 ```
 
+Note a new folder has been created that's named `front_of_house`.
 
 ```rust
 // src/front_of_house/hosting.rs
