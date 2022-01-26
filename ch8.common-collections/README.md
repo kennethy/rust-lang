@@ -1,8 +1,11 @@
 # Chapter 8. Collections
 
-## Vectors
+## 8.1. Vectors
 
-Declaration
+The type we will be storing in the vector needs to annotated if it starst out empty.
+
+Like any other `struct`, a vector is freed when it goes out of scope. All of its contents are also dropped.
+
 ```rust
 let v1: Vec<i32> = Vec::new();
 
@@ -21,14 +24,18 @@ v.push(3);
 
 ### Reading Vecs
 
+Access with `[]` and `&` which returns a reference.
+
 ```rust
 let v = vec![1, 2, 3, 4];
 
-// 1st way with indexing
 let third: &i32 = &v[2];
 println!("{}", third); // => 3
+```
 
-// 2nd way with get()
+Access with `get()` which returns an `Option<&T>`.
+
+```rust
 match v.get(2) {
     Some(third) => println!("{}", third),
     None => println!("invalid"),
@@ -38,13 +45,15 @@ match v.get(2) {
 ### Immutable/Mutable References
 
 The following won't compile because there can't be both an immutable and mutable reference in the same scope.
-The reason is that upon modifying the original object, its references may have moved upon resizing.
+
+The reason is that upon modifying the original object, its references may have been moved upon resizing.
+
 ```rust
 let mut v = vec![1, 2, 3, 4, 5];
 
 let first = &v[0];
 
-v.push(6); // fist may no longer be valid because contents of v may be moved else where
+v.push(6); // first may no longer be valid because contents of v may be moved else where
 
 println!("The first element is: {}", first);
 ```
@@ -64,12 +73,12 @@ for i in &v {
 ```rust
 let mut v = vec![1, 2, 3];
 
-for i in &v {
+for i in &mut v {
     *i += 10;
 }
 ```
 
-### Using Enum
+### Using Enum to Store Multiple Types
 
 Enum variants are of the same enum type, so variants under the same enum can be placed in a vector.
 
