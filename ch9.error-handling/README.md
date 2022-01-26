@@ -136,6 +136,13 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
+## 9.3. `panic!` or not to `panic!`
+
+Returning `Result` is a good default choice when you are define a function that might fail, because the calling code could choose to attempt to recover in a way that's appropriate for its situation.
+
+`panic!()` or `expect()` or `unwrap()` is appropriate when:
+- protoyping, testing
+- we know for certain the `parse` result is valid
 
 ### Guidelines for Error Handling
 
