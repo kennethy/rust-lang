@@ -238,20 +238,82 @@ impl<T: Display> ToString for T {
 }
 ```
 
-## Lifetimes
+## 10.3. Lifetimes
 
 Lifetime annotations describe the relationships of the lifetime of multiple references to each other without affecting the lifetime.
 
-Annotations to help the borrower checker to ensure there are not dangling pointers.
+
+### Preventing Dangling References with Lifetimes
+
+The main purpose of lifetimes is to prevent dangling references.
+
+The following code would not compile because `x` doesn't "live long enough". It goes out of scope when the inner scope ends but `r` is still valid for the outer scope.
+
+```rust
+{
+    let r;
+    {
+        let x = 5;
+        r = &x;
+    }
+
+    println!("r: {}", r);
+}
+```
+
+### The borrower checker
+
+At compile time, Rust compares the size of the two lifetimes and see that `r` has a lifetime of `'a` but that it refers to a memory with a lifetime of `'b`. The program fails to compile because `'b` is shoter than `'a`: the subject of the reference doesn't live as long as the reference.
+
+```rust
+{
+    let r;                // ---------+-- 'a
+                          //          |
+    {                     //          |
+        let x = 5;        // -+-- 'b  |
+        r = &x;           //  |       |
+    }                     // -+       |
+                          //          |
+    println!("r: {}", r); //          |
+} 
+```
+
+The following is fine since `'b` lives longer than `'a`.
+
+```rust
+{
+    let x = 5;            // ----------+-- 'b
+                          //           |
+    let r = &x;           // --+-- 'a  |
+                          //   |       |
+    println!("r: {}", r); //   |       |
+                          // --+       |
+}    
+```
+
+### Generic Lifetimes in Functions
+
+The following won't compile because the return type needs a generic lifetime parameter to tell whether the reference being returned refers to `x` or `y`.
+
+```rust
+fn longest(x: &str, y: &str) -> &str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+```
+
 ### Syntax
 
 ```rust
-&i32
-&'a i32
-&'a mut i32
+&i32 // a reference
+&'a i32 // a reference with an explicit lifetime
+&'a mut i32 // a mutable reference with an explicit lifetime
 ```
 
-### Annotations in Functions
+### Lifetime Annotations in Functions
 
 Used when one of the parameters is a reference.
 
@@ -259,13 +321,35 @@ When returning a reference from a function, the lifetime parameter for the retur
 
 Lifetime syntax is about connecting the lifetime of various parameters and return values of functions — to prevent dangling references.
 
+The signature marks that: for some lifetime `'a`, the lifetime of the returned reference will be valid as long as both the parameters are.
+
+When we pass conrete references to `longest`, the concrete lifetime that is substited for `'a` is the part of the scope of `x` that overlaps with the scope of `y`. The generic lifetime `'a` will get the concrete lifetime that is equal to the smaller of the lifetimes of `x` and `y`.
+
 ```rust
-fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {}
 ```
+
+We as humans can see `string1` will remain valid, but the rust compiler would not be able to.
+
+```rust
+fn main() {
+    let string1 = String::from("long string is long");
+    let result;
+    {
+        let string2 = String::from("xyz");
+        result = longest(string1.as_str(), string2.as_str());
+    }
+    println!("The longest string is {}", result);
+}
+```
+
+### Thinking in Terms of Lifetimes
+
+When returning a reference from a funtion, the lifetime parameter for the return type needs to match the lifetime parameter for one of the parameters.
 
 ### Annotations in Structs
 
-Used when a struct uses references. 
+The following annotation means an instance of `ImportantExcerpt` can't outlive the reference it holds in its `part` field.
 
 ```rust
 struct ImportantExcerpt<'a> {
@@ -283,7 +367,7 @@ Compiler will add the lifetime annotations automatically based on three rules be
 
 ### Annotations in Method Defintions
 
-Lifetime names for struct fields always need to be declared.
+Lifetime names for struct fields always need to be declared after the `impl` keyword and then used after the struct's name, because those lifetimes are part of the struct's type (how we defined above).
 
 ```rust
 impl<'a> ImportantExcerpt<'a> {
