@@ -79,9 +79,9 @@ impl Point<f32> {
 
 The process of turning generic code into specific code by filling in the concrete types that are used when compiled. As a result, using generics would not induce runtime cost.
 
-## Traits
+## 10.2. Traits: Defining Shared Behaviour
 
-Add common functionalities to different types. Similar to interfaces. One restriction is that we cannot implement external traits on external types.
+The purpose of `traits` is to add common functionalities to different types. Similar to interfaces. One restriction is that we cannot implement external traits on external types.
 
 ```rust
 pub trait Summary {
@@ -98,13 +98,18 @@ impl Summary for Point {
         format!("({}, {})"), self.x, self.y);
     }
 }
+```
 
-// then we can call
+Then we can call
+
+```rust
 let p = Point { x: 1, y: 2 };
 println!("{}", p.summarize());
 ```
 
 ### Default implementation
+
+A default implementation can be defined in the trait block. Default implementations can also call other methods in the same trait, even if those methods don't have a default implementation.
 
 ```rust
 pub trait Summary {
@@ -119,35 +124,50 @@ pub trait Summary {
 ```
 ### Traits as Parameters
 
+We can use traits to define functions that accept many different types.
+
+Instead of using a concrete type for the `item` parameter, we allow `item` to be any type that implements the `Summary` trait.
+
 ```rust
 pub fn notify(item: &impl Summary) {
     println!("Breaking News! {}", );
 }
+```
 
-// or long form with trait bound
+Alternatively, we can use the long form with `trait bound`:
+
+```rust
 pub fn notify<T: Summary>(item: &T) {
     println!("Breaking news! {}", item.summarize());
 }
 ```
 
+It's needed when a function allows different params of the same type and we require all of them to implement the  same trait:
+
+```rust
+pub fn notify<T: Summary>(item1: &T, item2: &T) {}
+```
+
 ### Specifying Multiple Traits
 ```rust
-pub fn notify(item: &(impl Summary + Display)) {
+pub fn notify(item: &(impl Summary + Display)) {}
 
 // or
-pub fn notify<T: Summary + Display>(item: &T) {
+pub fn notify<T: Summary + Display>(item: &T) {}
 ```
 
 ### Specifying Traits with Where clause
 
+Using too many trait bounds make the functions hard to read. The `where` clause comes to the rescue.
+
 ```rust
-pub fn notify<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
+pub fn notify<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {}
 
 // or
 pub fn notify<T, U>(t: &T, u: &U) -> i32
     where T: Display + Clone,
           U: Clone + Debug
-{
+{}
 ```
 
 ### Return types that implements traits
@@ -168,7 +188,25 @@ fn returns_summarizable(switch: bool) -> impl Summary {
 }
 ```
 
+### Fixing the `largest` function with trait bounds
+
+```rust
+fn largest<T: PartialOrd + Copy>list(list: &[T]) -> T {
+    let mut largest = list[0];
+
+    for &item in T {
+        if item > largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
+```
+
 ### Conditionally implement methods
+
+We can use trait bounds with an `impl` block to implement methods conditionally.
 
 ```rust
 struct Pair<T> { ... }
@@ -180,13 +218,25 @@ impl<T> Pair<T> {
 }
 
 impl<T: Display + PartialOrd> Pair<T> {
-    // ...
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            // ...
+        } else {
+            // ...
+        }
+    }
 }
 ```
 
 ### Blanket Implementations
 
-When implementing a trait on any type that satisfies the trait bounds
+We can also conditionally implement a trait for any type that implements for another trait. Implementations of a trait on any type that satisfies the trait bounds are called `blanket implementations`.
+
+```rust
+impl<T: Display> ToString for T {
+    // ...
+}
+```
 
 ## Lifetimes
 
