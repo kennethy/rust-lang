@@ -1,8 +1,10 @@
 # Chapter 10. Generic Types, Traits, and Lifetime
 
-## Generics
+## 10.1. Generic Data Types
 
-### Example with largest.
+### In Function Definitions
+
+When we use a parameter in the body of the function, we have to declare the parameter name in the signature so the compiler knows what the name means.
 
 ```rust
 fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
@@ -18,22 +20,25 @@ fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
 }
 ```
 
-### Example with Struct.
+### In Struct Definitions
 
 ```rust
 struct Point<T> {
     x: T,
     y: T,
 }
+```
 
-// or multiple types
+Or with multiple times:
+
+```rust
 struct Point<T, U> {
     x: T,
     y: U,
 }
 ```
 
-### Example with Enum
+### In Enum Definitions
 
 ```rust
 enum Option<T> {
@@ -41,12 +46,23 @@ enum Option<T> {
     None,
 }
 ```
+d to
+or
 
-### Method Definitions
+```rust
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+```
+
+### In Method Definitions
+
+Specifying `<T>` right after `impl` to let Rust know the type in the angle brackets in `Point` is a generic type rather than a concrete type.
 
 ```rust
 impl<T> Point<T> {
-    fn x(&self) -> T {
+    fn x(&self) -> &T {
         &self.x
     }
 }
