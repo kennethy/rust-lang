@@ -1,5 +1,7 @@
 # Chapter 11. Tests
 
+## 11.1 How to Write Tests
+
 Test functions are annotated with `#[test]`. Run tests with `cargo test`.
 
 ```rust
@@ -11,7 +13,6 @@ mod tests {
     }
 }
 ```
-
 
 When testing functions outside of the module, Include `use super::*` glob to bring the functions into the module.
 
@@ -31,10 +32,10 @@ fn outer() {}
 ### Common Macros
 
 ```rust
-assert!(a_boo);
+assert!(a_bool);
 assert!(a_bool, "Expected, but was {}", result); // or supply custom error message
-assert_eq!(a_bool, another_bool);
-assert_ne!(a_bool, another_bool);
+assert_eq!(a, b);
+assert_ne!(a, b);
 ```
 
 ### Atributes
