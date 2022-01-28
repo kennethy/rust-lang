@@ -118,20 +118,26 @@ Or run only the ignored tests
 cargo test -- --ignored
 ```
 
-## Tests Organization
+## 11.3. Tests Organization
 
 `#[cfg(test)]` tells the compiler to not include the tests module when running `cargo build`.
 
 ### Unit Tests
 
-By convention, placed under `src/` and annotated with `#[cfg(test)]`.
+By convention, placed under `src/` and annotated with `#[cfg(test)]`. The convention is to create a module named `tests` in each file to contain the test funtions and to annotate the module `cfg(test)`.
+
+The `#[cfg(test)]` annotation on the tests module tells Rust to compile and run the test code only when you run `cargo test`, not when you run `cargo build`.
+
+**Testing Private Functions**
+
+Rust's privacy rules allow us sto test private functions.
+
 ### Integration tests
 
-By convention, they are placed in the `tests` folder at the top level of the project directory, and without the `#[cfg(test)]`. Cargo treats the `tests` folder specially and compile the crates only when running `cargo test`.
+By convention, they are placed in the `tests` folder at the top level of the project directory, and without the `#[cfg(test)]`. Cargo treats the `tests` folder specially and compile the crates only when running `cargo test`. Each file in the `tests` folder is compiled as its own separate crate.
 
 Integration tests use your library in the same way any other code would.
 
-This is supported only for lib crates.
 
 ```rust
 // tests/integration_test.rs
@@ -144,8 +150,15 @@ fn it_adds_two() {
 ```
 
 Run specific integration tests
-```
+
+```sh
 cargo test --test [PATTERN]
 ```
 
-Utils are named with the special name `mod.rs`. They would not show when running `cargo test --test`.
+**Submodules in Integration Tests**
+
+Utils are named with the special name `tests/common/mod.rs`. They would not show when running `cargo test --test`.
+
+**Integration Tests for Binary Crates**
+
+Integration tests are only available for library crates, since binary crates are meant to be run on their own.
