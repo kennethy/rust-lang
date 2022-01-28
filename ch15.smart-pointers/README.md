@@ -4,9 +4,9 @@ Smart pointers not only act like a pointer, but have additional metadata and cap
 
 `Deref` trait allows an instance of the smart pointer struct to behave like a reference, and `Drop` trait allows you to customize the code to run when the smart pointer goes out of scope.
 
-## 15.1 Using Box<T> to Point to Data on the Heap
+## 15.1. Using Box<T> to Point to Data on the Heap
 
-Box<T> is a pointer stored on the stack, that references data stored in the heap.
+`Box<T>` is a pointer stored on the stack, that references data stored in the heap.
 
 Used when:
 1. have a type whose size is unknown at compile time and you want to use a value of that type in a context that requires an exact size
@@ -14,16 +14,51 @@ Used when:
 3. when you want to own a value and you care only only that it's a type that implements a particular trait rather than being of a specific type.
 
 
+### Using a `Box<T>` to Store Data on the Heap
+
 ```rust
 let b = Box::new(5);
 println!("b = {}", b);
 ```
 
-## 15.2 Treating smart pointers like regular references with the `Deref` Trait
+### Enabling Recursive Types with Boxes
 
-Box<T> is a smart pointer that implements the `Deref` trait and allow Box<T> values to be treated like references.
+For a recursive type which size can't be known at compile can use `Box<T>`.
 
+```rust
+enum List {
+    Cons(i32, List), // <---- this would not work
+    Nil
+}
+```
+
+However, with `Box<T>`,
+
+```rust
+enum List {
+    Cons(i32, Box<List>),
+    Nil
+}
+```
+
+`Box<T>` provide only the indirection and heap allocation; they don't have any other special capabilities. It implements `Deref` so values can be treated like references.
+
+## 15.2 Treating Smart Pointers like Regular References with the `Deref` Trait
+
+Implementing the `Deref` trait allows us to customize the behaviour of the deference opreator (`*`).
+
+### Using `Box<T>` Like a Reference
+
+```rust
+let x = 5;
+let y = Box::new(x);
+
+assert_eq!(5, x);
+assert_eq!(5, *y);
+```
 ### Defining Own Smart Pointer
+
+To support deferencing, we need to implement the `Deref` trait with the `deref` fn for the struct.
 
 ```rust
 struct MyBox<T>(T);
@@ -43,7 +78,7 @@ impl<T> Deref for MyBox<T> {
 }
 ```
 
-Rut runs `*(smart_pointer.deref())` under the scene. `deref()` returns a reference because of the ownership system. We don't want to take ownership of the value inside the box.
+Rust runs `*(smart_pointer.deref())` under the scene. `deref()` returns a reference because of the ownership system. We don't want to take ownership of the value inside the box.
 
 ### Implicit Deref Coercion
 
@@ -67,12 +102,11 @@ hello(&m);
 
 // or without deref coercion
 hello(&(*m)[..]);
-
 ```
 
 ### How Deref Coercion Interacts with Mutability
 
-Rust does deref coercion when it finds types and  trait implementations in three cases:
+Rust does deref coercion when it finds types and trait implementations in three cases:
 1. From `&T` to `&U` when `T: Deref<Target = U>`
 2. From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
 3. From `&mut T` to `T: Deref<Target=U>`
