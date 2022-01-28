@@ -38,7 +38,7 @@ assert_eq!(a, b);
 assert_ne!(a, b);
 ```
 
-### Atributes
+### Attributes
 
 Use `#[should_panic]` when expect fn to panic.
 
@@ -66,7 +66,7 @@ fn different_panic(a_val: i32) {
 }
 ```
 
-### Use Result<T, E> in Tests   
+### Use `Result<T, E>` in Tests   
 
 ```rust
 mod tests {
