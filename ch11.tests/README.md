@@ -81,20 +81,24 @@ mod tests {
 }
 ```
 
-## Controlling how the tests run
+## 11.2. Controlling how the tests run
 
 By default, tests are run in parallel. Use the following to configure the tests to run in sequence.
+
+Ideally the tests should be independently so they can run in parallel without affecting each other.
 
 ```sh
 cargo test -- --test-threads=1
 ```
+
+### Show Function Output
 
 By default, `println!` are captured/surpressed for passing tests. Can show all output with:
 ```sh
 cargo test -- --show-output
 ```
 
-Run subset of tests.
+### Run subset of tests.
 
 ```sh
 cargo test [N_NAME_PATTERN]
