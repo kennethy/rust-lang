@@ -140,7 +140,7 @@ drop(v);
 
 ## 15.4 `Rc<T>`, the Reference Counted Smart Pointer
 
-`Rc<T>`, abbreviated for reference counting, is a smart pointer type that keep tracks of the number of references to a value. It's applicable when a value has multiple owners. It's only for use in single-threaded scenarios.
+`Rc<T>`, abbreviated for reference counting, is a smart pointer type that keep tracks of the number of references to a value. It's applicable when a value has multiple (read-only) owners. It's only for use in single-threaded scenarios.
 
 We need to `use std::rc::Rc` because it's not in the prelude.
 
@@ -175,14 +175,14 @@ fn main() {
 
 ## 15.5 `RefCell<T>` and the Interior Mutability
 
-With `RefCell<T>`, the borrowing rules' invariants are enforced at runtime.
+Interior mutability allows you to mutate data even when there are immutable references to the data; normally this is not allowed by the borrowing rules.
 
-Mutating the value inside an immutable value is the interior mutability pattern.
+With `RefCell<T>`, the borrowing rules' invariants are enforced at runtime. The additional checks at runtime could have some performance impact.
 
-### Differences
+### Enforcing Borrowing Rules at Runtime with `RefCel<T>`
 
 - `Rc<T>` enables multiple owners of the same data; `Box<T>` and `RefCell<T>` have single owners.
-- `Box<T>` allows immutable or mutable borrows checked at compile time; Rc<T> allows only immutable borrows checked at compile time; RefCell<T> allows immutable or mutable borrows checked at runtime.
+- `Box<T>` allows immutable or mutable borrows checked at compile time; `Rc<T>` allows only immutable borrows checked at compile time; `RefCell<T>` allows immutable or mutable borrows checked at runtime.
 - Because `RefCell<T>` allows mutable borrows checked at runtime, you can mutate the value inside the RefCell<T> even when the RefCell<T> is immutable.
 
 ### Usage
