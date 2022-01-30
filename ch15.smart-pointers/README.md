@@ -129,7 +129,9 @@ impl Drop for CustomSmartPointer {
 
 ### Dropping a Value early with `std::mem::drop`
 
-Rust does not allow calling `val.drop()` directly. Use `std::mem::drop` instead.
+`drop` is always called when variables go out of scope. To prevent `double free` error, Rust does not allow us to call `drop` explicitly.
+
+Use `std::mem::drop` instead.
 
 ```rust
 // std::mem::drop is in the prelude
@@ -138,8 +140,9 @@ drop(v);
 
 ## 15.4 `Rc<T>`, the Reference Counted Smart Pointer
 
-`Rc<T>`, abbreviated for reference counting, is a  smart pointer type that keep tracks of the number of references to a value. It's applicable when a value has multiple owners. It's only for use in single-threaded scenarios.
+`Rc<T>`, abbreviated for reference counting, is a smart pointer type that keep tracks of the number of references to a value. It's applicable when a value has multiple owners. It's only for use in single-threaded scenarios.
 
+We need to `use std::rc::Rc` because it's not in the prelude.
 
 ```rust
 enum List {
@@ -157,7 +160,9 @@ fn main() {
 }
 ```
 
-We need to `use std::rc::Rc` because it's not in the prelude. Every call to `Rc::clone()` increments the reference count.
+### Cloning an `Rc<T>`
+
+Every call to `Rc::clone()` increments the reference count. `a.clone()` is allowed the convention is to use `Rc::clone`.
 
 Use `Rc::strong_count()` to get the reference count.
 
