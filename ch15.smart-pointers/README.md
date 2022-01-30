@@ -164,7 +164,7 @@ fn main() {
 
 Every call to `Rc::clone()` increments the reference count. `a.clone()` is allowed the convention is to use `Rc::clone`.
 
-Use `Rc::strong_count()` to get the reference count.
+Use `Rc::strong_count()` to get the reference count. The data is cleaned up only when strong count reaches to 0.
 
 ```rust
 fn main() {
@@ -306,7 +306,9 @@ fn main() {
 
 ### Preventing Reference Cycles with Weak<T>
 
-Create a weak reference by calling `Rc::downgrade` with a reference to `Rc<T>`. It returns a smart pointer typed to `Weak<T>`. The count is tracked via `weak_count` and the difference between `strong_count` is that `weak_count` doesn't need to be 0 for the `Rc<T>` instance to be cleaned up.
+Create a weak reference by calling `Rc::downgrade` with a reference to `Rc<T>`. It returns a smart pointer typed to `Weak<T>`. The count is tracked via `Rc::weak_count` and the difference between `strong_count` is that `weak_count` doesn't need to be 0 for the `Rc<T>` instance to be cleaned up.
+
+Weak references are useful when there's a acyclic data dependency, like a root node owning its child nodes but not the other way around. Children nodes should be dropped when the parent node is dropped, but if a child node is dropped, its parent should not be dropped.
 
 ```rust
 use std::cell::RefCell;
@@ -316,7 +318,7 @@ use std::rc::{Rc, Weak};
 struct Node {
     value: i32,
     parent: RefCell<Weak<Node>>, // refers to parent, but does not own parent
-    children: RefCell<Vec<Rc<Node>>>,
+    children: RefCell<Vec<Rc<Node>>>, // owns the children
 }
 
 fn main() {
