@@ -6,6 +6,8 @@ The model where a language calls the operating system APIs to create threads is 
 
 Rust standard library provides an `1:1` implementation.
 
+In the context of thread implementations, `runtime` means the code that is included by the language in every binary.
+
 ## Creating Threads
 
 ```rust
@@ -19,7 +21,7 @@ thread::spawn(|| {
 });
 ```
 
-## Waiting using `join()`
+## Wait for all threads using `join()`
 
 `thread::spawn` returns a handle, and calling `join()` on the handle blocks the thread currently running until the thread represented by the handle terminates.
 
@@ -71,7 +73,7 @@ fn main() {
 
 ### Channels
 
-A channel has two halves, a transmitter and a receiver. `mspc` stands for multiple producer, single consumer.
+A channel has two halves, a transmitter and a receiver. `mpsc` stands for multiple producer, single consumer. A channel can have multiple sending ends that produce values but only one receiving end that consumes those values.
 
 ```rust
 use std::sync::mpsc;
@@ -89,6 +91,8 @@ fn main() {
     println!("Got {}", received);
 }
 ```
+
+`send()` returns a `Result<T, E>`.
 
 `recv()` blocks until a value is sent down the channel. Once it's received, `recv` returns `Result<T, E>`.
 
@@ -169,17 +173,17 @@ fn main() {
 
 `lock()` blocks the current thread until the lock is obtained. It returns a smart pointer `MutexGuard`, wrapped in a `LockResult` that we handled with the call to `unwrap`. `MutexGuard` implements the `Drop` trait and will release the lock once it becomes out of scope.
 
-`unwrap()` is called in case the other thread holding the lock panics. This ensures the current thread will panic as well. It also unwraps the `LockResult`. `Mutex<T>` also provides interior mutability similar to the `Cell` family.
+`unwrap()` is called in case the other thread holding the lock panics. This ensures the current thread will panic as well. It also unwraps the `LockResult`. 
 
 ### Multiple Ownership with Multiple Threads
+
+`Arc` is a thread-safe alternative to `Rc`. The reason why all primitive types aren't atomic is because thread safety comes with a performance penalty that you only want to pay when you really need to.
 
 ```rust
 use std::sync::{Arc, Mutex};
 use std::thread;
 
 fn main() {
-    // Arc is a thread-safe alternative to Rc. `a` stands for atomic.
-    // it's for multi-thread purposes and it comes with a performance cost
     let counter = Arc::new(Mutex::new(0));
     let mut handles = vec![]; // not used in another thread, so no need to use `Arc`
 
@@ -201,15 +205,19 @@ fn main() {
 }
 ```
 
+### Similarities between `RefCell<T>` and `Mutex<T>`/`Arc<T>`
+
+`Mutex<T>` provides interior mutability. This is why we are allowed to modify the `counter` even though it's immutable.
+
 ## 16.4. Extensible Concurrency with the `std::marker::Sync` and `std::marker::Send` trait
 
 ### `Send` trait
 
-Type that implements `Send` indicate that the ownership of itself can be transferred between threads. Any type composed entirely of `Send` types is automatically marked as `Send` as well.
+Types that implement the `Send` trait indicates that the ownership of itself can be transferred between threads. Any type composed entirely of `Send` types is automatically marked as `Send` as well.
 
 ### `Sync` trait
 
-Values of type that impleemnts `Sync` can be referenced from multiple threads.
+Types that implement `Sync` can be referenced from multiple threads. For example, `Mutex<T>` is `Sync`.
 
 Primitives are `Sync`, and types composed entirely of `Sync` are also `Sync` automatically.
 
