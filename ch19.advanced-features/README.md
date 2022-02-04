@@ -403,3 +403,98 @@ fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
     Box::new(|x| x + 1)
 }
 ```
+
+### 19.5. Macros
+
+`macro` refers to a family features in Rust: declarative macros with `macro_rules!` and three kinds of procedural macros:
+
+1. Custom `#[derive]` macros that is used on structs and enums, and specifies the new code added
+2. Attribute-like macros that define custom attributes usable on any item
+3. Function-like macros that look like function calls but operate on the tokens specified as their arguments.
+
+### Difference betwen Macros and Functions
+
+Macros are a way of writing code that writes other code, which is also known as *metaprogramming*.
+
+Macros are take variable amount of variables. It can implement a trait on a given type. Functions can't because it gets called at runtime and a trait needs to be implemented at compile time.
+
+### Delarative macros with `macro_rules!`
+
+Delarative macros match patterns and generate code based on captured expressions.
+
+- `#[macro_export]` indicates the macro will be made available whenever the crate in which the macro is defined is bought into the scope.
+
+```rust
+#[macro_export]
+macro_rules! vec {
+    ( $( $x:expr ),* ) => {
+        {
+            let mut temp_vec = Vec::new();
+            $(
+                temp_vec.push($x);
+            )*
+            temp_vec
+        }
+    };
+}
+```
+
+### Procedural Macros for Generating Code from Attributes
+
+
+Procedural macros accept some code as an input. operate on the that code, and produce some code as an output.
+
+Their definitions must reside in their own crate in a special crate type.
+
+```rust
+use proc_macro; // brings in `TokenStream`
+
+#[some_attribute]
+pub fn some_name(input: TokenStream) -> TokenStream {
+    // ...
+}
+```
+
+
+### How to Write a Custom `derive` Macro
+
+Usage
+
+```rust
+use hello_macro::HelloMacro;
+use hello_macro_derive::HelloMacro;
+
+
+#[derive(HelloMacro)]
+struct PanCakes;
+
+fn main() {
+    Pancakes::hello_macro();
+}
+```
+
+Trait Creation
+
+`cargo new hello_macro --lib`
+
+```rust
+// src/lib.rs
+pub trait HelloMacro {
+    fn hello_macro();
+}
+```
+
+Derivable Trait
+
+`cargo new hello_macro_derive --lib` within the directory of the `hello_macro` crate.
+
+Then we add the following to the `Cargo.toml` for `hello_macro_derive`.
+
+```toml
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = "1.0"
+quote = "1.0"
+```

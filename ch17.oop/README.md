@@ -8,7 +8,7 @@ Rust is object oriented: structs and enums have data, and `impl` blocks provide 
 
 **Encapsulation that hides Implementation Details**
 
-Control encapuslation with `pub` keyword.
+Control encapuslation with the `pub` keyword.
 
 **Inheritance as a Type System and As Code Sharing**
 
@@ -21,6 +21,10 @@ Rust uses generics to abstract over different possible types and trait bounds to
 We can't add data to traits and they are used for abstraction across common behaviour.
 
 Suppose we want to write a GUI library, and users may wish to support drawing new types. We use traits to accomplish this:
+
+`Box<dyn Draw>` is called a trait object; it's a stand-in for any type inside a `Box` that implements the `Draw` trait.
+
+Generics 
 
 ```rust
 pub trait Draw {
@@ -69,16 +73,19 @@ impl Draw for Button {
 
 **Object Safety Is Required for Trait Objects**
 
-A trait is object safe if all the methods defined in the trait have the follwoing properties:
-1. the return type isn't `Self`.
+Only object-safe traits can be made into trait objects.
+
+A trait is object safe if all the methods defined in the trait have the following properties:
+1. The return type isn't `Self`.
 2. There are no generic type parameters.
 
+`Self` is an alias for the type we are implementing the traits or methods on. Rust no longer knows the concrete type that's implementing that trait once a trait object is used.
 
 An example of a trait whose methods are not object safe
 
 ```rust
 pub trait Clone {
-    fn clone(&self) -> Self;
+    fn clone(&self) -> Self; // rust won't know which type to use
 }
 ```
 
@@ -179,97 +186,46 @@ impl State for Published {
 }
 ```
 
-### 19.5. Macros
-
-`macro` refers to a family features in Rust: declarative macros with `macro_rules!` and three kinds of procedural macros:
-
-1. Custom `#[derive]` macros that is used on structs and enums, and specifies the new code added
-2. Attribute-like macros that define custom attributes usable on any item
-3. Function-like macros that look like function calls but operate on the tokens specified as their arguments.
-
-### Difference betwen Macros and Functions
-
-Macros are a way of writing code that writes other code, which is also known as *metaprogramming*.
-
-Macros are take variable amount of variables. It can implement a trait on a given type. Functions can't because it gets called at runtime and a trait needs to be implemented at compile time.
-
-### Delarative macros with `macro_rules!`
-
-Delarative macros match patterns and generate code based on captured expressions.
-
-- `#[macro_export]` indicates the macro will be made available whenever the crate in which the macro is defined is bought into the scope.
+### Encoding states and 
 
 ```rust
-#[macro_export]
-macro_rules! vec {
-    ( $( $x:expr ),* ) => {
-        {
-            let mut temp_vec = Vec::new();
-            $(
-                temp_vec.push($x);
-            )*
-            temp_vec
+pub struct Post {
+    content: String,
+}
+
+pub struct DraftPost {
+    content: String,
+}
+
+impl Post {
+    pub fn new() -> DraftPost {
+        DraftPost {
+            content: String::new(),
         }
-    };
+    }
+
+    pub fn content(&self) -> &str {
+        &self.content
+    }
 }
-```
 
-### Procedural Macros for Generating Code from Attributes
-
-
-Procedural macros accept some code as an input. operate on the that code, and produce some code as an output.
-
-Their definitions must reside in their own crate in a special crate type.
-
-```rust
-use proc_macro; // brings in `TokenStream`
-
-#[some_attribute]
-pub fn some_name(input: TokenStream) -> TokenStream {
-    // ...
+impl DraftPost {
+    pub fn request_review(self) -> PendingReviewPost {
+        PendingReviewPost {
+            content: self.content
+        }
+    }
 }
-```
 
-
-### How to Write a Custom `derive` Macro
-
-Usage
-
-```rust
-use hello_macro::HelloMacro;
-use hello_macro_derive::HelloMacro;
-
-
-#[derive(HelloMacro)]
-struct PanCakes;
-
-fn main() {
-    Pancakes::hello_macro();
+pub struct PendingReviewPost {
+    content: String,
 }
-```
 
-Trait Creation
-
-`cargo new hello_macro --lib`
-
-```rust
-// src/lib.rs
-pub trait HelloMacro {
-    fn hello_macro();
+impl PendingReviewPost {
+    pub fn approve(self) -> Post {
+        Post {
+            content: self.content
+        }
+    }
 }
-```
-
-Derivable Trait
-
-`cargo new hello_macro_derive --lib` within the directory of the `hello_macro` crate.
-
-Then we add the following to the `Cargo.toml` for `hello_macro_derive`.
-
-```toml
-[lib]
-proc-macro = true
-
-[dependencies]
-syn = "1.0"
-quote = "1.0"
 ```
