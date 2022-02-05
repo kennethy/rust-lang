@@ -1,7 +1,9 @@
 # 18. Patterns and Matching
 
-## Match Arms
-```
+## 18.1. All the Places Patterns Can Be Used
+
+### Match Arms
+```rust
 match VAUE {
     PATTREN => EXPRESSION,
     PATTERN => EXPRESSION,
@@ -11,7 +13,7 @@ match VAUE {
 
 `_` is used to ignore value. Match arms need to be exhaustive and account for all possible cases.
 
-## Conditional `if let` Expressions
+### Conditional `if let` Expressions
 
 ```rust
 let favorite_color: Option<&str> = None;
@@ -32,7 +34,50 @@ if let Some(color) = favorite_color {
 }
 ```
 
-- `If let` does not need to be exhaustive like match arms.
+`if let` does not need to be exhaustive like match arms.
+
+### `while let`  conditional loop
+
+```rust
+let mut stack = Vec::new();
+
+stack.push(1);
+stack.push(2);
+stack.push(3);
+
+while let Some(top) = stack.pop() {
+    println!("{}", top);
+}
+```
+
+### `for` loops
+
+```rust
+let v = vec![1, 2, 3];
+
+for (index, value) in v.iter().enumerate() {
+    println!("{} is at index {}", value, index);
+}
+```
+
+### `let` statements
+
+`let x = 5` actually means bind everything to the variable `x`, whatever the value is.
+
+### Function Parameters
+
+Function parameters can also be patterns.
+
+```rust
+fn foo(&(x, y): &(i32, i32)) {
+    println!("{}, {}", x, y);
+}
+
+fn main() {
+    let point = (3, 5);
+    foo(&point);
+}
+```
 
 ## 18.2 Refutability
 
