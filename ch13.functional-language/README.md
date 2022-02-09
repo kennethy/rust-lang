@@ -1,15 +1,15 @@
 # 13. Functional Language Features: Iterators and Closures
 
-## Closure
+## 13.1. Closures
+
+Closures are anonymous functions you can save in a variable or pass as arguments to other functions.
 
 ### Definition
 
-The compiler is able to infer the typeos of the parameters and the return type. Annotate types only when we want to increase explicitness and clarity.
+The compiler is able to infer the types of the parameters and the return type. Annotate types only when we want to increase explicitness and clarity.
 
 ```rust
-let closure = |num| {
-    num
-}
+let closure = |num| num;
 ```
 
 Annotated Version:
@@ -20,6 +20,8 @@ let closure = |num: i32| -> i32 {
 ```
 
 Cacher Example
+
+`Fn` trait is provided by the standard library. All closutes implement at least one of the traits: `Fn`, `FnMut`, or `FnOnce`.
 
 ```rust
 struct Cacher<T>
@@ -49,6 +51,38 @@ impl<T> Cacher<T> {
         }
     }
 }
+```
+
+There are two limitations with the Cacher implementation above:
+- It assumes the `arg` that we are passing to `value` be the same, as such, the return value will always be the same.
+- It only accepts closures that take one parameter of type `u32`, and return a `u32`.
+
+### Capturing the Environment with Closures
+
+Contrary to regular functions, closures can capture their environment and access variables from the scope in which they are defined. Additional memory is used to store the values for use in the closure body.
+
+```rust
+let x = 4;
+let equal_to_x = |z| z == x;
+```
+
+Closure capture values from their environment in three ways encoded in the following traits:
+- `FnOnce` consumes the variables it captures from its enclosing scope, known as closure's environment. To consume the captured variables, the closure must take ownership of these variables and move them into the closure when it is defined. The `Once` part of the name indicates that it can't take the ownership of the same variables more than once.
+- `FnMut` can change the environment because it mutably borrows values.
+- `Fn` borrows values from the environment immutably.
+
+We can force the closure to take ownership of the values by using the `move` keyword.
+
+```rust
+let x = vec![1, 2, 3];
+
+let equal_to_x = move |z| == z == x;
+
+// x can no longer be used since it's moved into the closure above
+
+let y = vec![1, 2, 3];
+
+assert!(equal_to_x(y));
 ```
 
 ## Iterators
