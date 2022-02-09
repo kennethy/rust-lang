@@ -85,7 +85,9 @@ let y = vec![1, 2, 3];
 assert!(equal_to_x(y));
 ```
 
-## Iterators
+## 13.2. Iterators
+
+Iterators are `lazy` in Rust, which means they have no effect until you call methods that consume the iterator.
 
 `iter()`  returns immutable references. `into_iter()` for owned values, and `iter_mut()` for mutable references.
 
@@ -98,7 +100,9 @@ for i in iter {
 }
 ```
 
-### Iter Trait
+### The `Iterator` Trait and the `next` Method
+
+All iterators implement the `Iterator` trait that is defined in the standard library.
 
 ```rust
 pub trait Iterator {
@@ -110,7 +114,9 @@ pub trait Iterator {
 }
 ```
 
-### Next Method
+### `next` Method
+
+`iter` needs to be mutable since it modifies the internal state of the iterator. It was not needed in a loop since the loop will take the ownership of the iter and made it mutable behind the scene.
 
 ```rust
 let v1 = vec![1, 2, 3];
@@ -125,27 +131,36 @@ assert_eq!(iter.next(), None);
 
 ### Methods that Consume the Iterator
 
-Methods calling the `next` method are called the consuming adaptors.
+Methods calling the `next` method are called the consuming adaptors, because calling them uses up the iterator.
 
 ```rust
 let v1 = vec![1, 2, 3];
 let iter = v1.iter();
-let total: i32 = iter.sum(); // consumes the iter
+let total: i32 = iter.sum(); // consumes the iter and it cannot be used after
 ```
 
 ### Methods that Produce Other Iterators
 
-Iterators are lazily evaulated.
+Other methods defined on the `Iterator` trait, known as `iterator adaptors`, allow you to change iterators into different kinds of iterators.
 
 ```rust
 let v1: Vec<i32> = vec![1, 2, 3];
 v1.iter().map(|x| x + 1);
 ```
 
-We can manually consumed the iterator by calling `collect()`.
+Since iterators are lazily evaulated, one of the consuming adaptor methods need to get called to get actual results. We can use the `collect()` method that consumes the iterator and collects the resulting values into a collection data type.
+
+`map` takes in a closure and returns a new iterator.
 
 ```rust
 let v2 = v1.iter().map(|x| x + 1).collect();
+```
+
+### Using Closures that Capture Their Environment
+
+```rust
+let v = vec![1, 2, 3, 4];
+let v: Vec<_> = v.into_iter().filter(|num| num % 2 == 0).collect();
 ```
 
 ### Custom Iterators
@@ -175,5 +190,4 @@ impl Iterator for Counter {
         }
     }
 }
-
 ```
