@@ -108,12 +108,14 @@ Or run a specific package
 cargo run -p [PACKAGE_NAME]
 ```
 
-## Installing Rust Binaries
+## 14.4. Installing Rust Binaries
+
+The command will allow you to install and use binary crates locally.
 
 ```rust
 cargo install [PACKAGE NAME]
 ```
 
-## Extending Cargo with custom commands
+## 14.5. Extending Cargo with custom commands
 
 If a binary in `$PATH` is named `cargo-something`, then it can be run as a subcommand `cargo something`. Use `cargo --list` to list them all.
