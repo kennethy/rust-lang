@@ -1,6 +1,6 @@
 # Chapter 14. Cargo and Crates.io
 
-## Customizing Profiles
+## 14.1. Customizing Profiles
 
 Cargo has two main profiles. `dev` (used by `cargo build`) and `release` (used by `cargo build --release`).
 
@@ -16,15 +16,20 @@ opt-level = 0
 opt-level = 3
 ```
 
-## Documentation
+## 14.2. Publishing a Crate to Crates.io
 
 ### Generate and View Documentation
 
 Use `cargo doc` to generate the documentation. `cargo doc --open` to geneate and open it.
 
-### Syntax for inserting documentation
-- Use `///` to add documentation.
-- Use `///!` for main pages.
+### Syntax for Inserting Documentatiyouon
+- Use `///` to add documentation comments.
+- Use `//!` to add documentation on the item that contains the comment.
+- Markdown is supported, so you can use `# Title` syntax to create a section
+
+**Documentation Comments as Tests**
+
+Running `cargo test` will run the code examples in the docuemntation as tests.
 
 ### Exporting a Convenient Public API with `pub use`
 
@@ -64,14 +69,14 @@ Publish with `cargo publish`. The publish is permanent, and there's no way to de
 
 ### Remove Versions
 
-Use `cargo yank --vers 1.0.1` to prevent new crates on depending the specified version. Undo with `cargo yank --vers 1.0.1 --undo`.
+Use `cargo yank --vers 1.0.1` to prevent new crates on depending the specified version. Undo with `cargo yank --vers 1.0.1 --undo`. Note that yank does not delete any code.
 
-##  Cargo Workspaces
+## 14.3. Cargo Workspaces
 
-A workspace is a set of packages that share the same `Cargo.lock` and output directory.
+A workspace is a set of packages that share the same `Cargo.lock` and output directory. Packages placed under the same workspace will have the compiled output placed under the same `target` folder even when we run `cargo build` in each of the package directory.
 
 ```toml
-# Cargo.toml in root folder
+# Cargo.toml in root folder of the workspace
 [workspace]
 
 members = [
@@ -80,16 +85,27 @@ members = [
 ]
 ```
 
-Specify which package to run with
+The workspace will conists of two subdirectorys `adder`, the binary crate, and `add-one`, the lib crate. `adder/Cargo.toml` references the lib crate via:
 
-```sh
-cargo run -p [PACKAGE_NAME]
+```toml
+add-one = { path = "../add-one" }
 ```
+### Depending on an External Package in a Workspace
 
-Or test specific package
+`Cargo.lock` will ensure all crates are using the same version of all dependencies.
+
+### Adding a Test to a Workspace
+
+`cargo test` runs all tests in a workspace. Alternatively, we can run package-specifc tests as well:
 
 ```sh
 cargo test -p [PACKAGE_NAME]
+```
+
+Or run a specific package
+
+```sh
+cargo run -p [PACKAGE_NAME]
 ```
 
 ## Installing Rust Binaries
