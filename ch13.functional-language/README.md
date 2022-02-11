@@ -194,7 +194,7 @@ impl Iterator for Counter {
 
 ## 13.3.
 
-TODO
+`env::args()` returns an iterator.
 
 ## 13.4. Comparing Performance: Loops vs. Iterators
 
