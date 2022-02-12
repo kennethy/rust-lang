@@ -114,6 +114,15 @@ fn value_in_cents(coin: Coin) -> u8 {
 }
 ```
 
+`match` can also be used to assign a value, though we need to ensure only one type is returned.
+
+```rust
+let guess: u32 = match guess.trim().parse() {
+    Ok(_) => 5,
+    Err(_) => "hello", // <--- this is not allowed
+}
+```
+
 ### Patterns that Bind to Values
 
 ```rust

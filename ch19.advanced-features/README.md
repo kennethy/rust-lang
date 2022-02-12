@@ -286,13 +286,18 @@ impl fmt::Display for Wrapper {
 
 ### Creating Type Synonyms with Type Aliases
 
+Use the `type` keyword to create an alias.
+
+The main use case for type synonyms is to reduce reptition. For example, defining an alias for `Box<dyn Fn() + Send + 'static>`.
+
+
 ```rust
 type Kilometers = i32;
 
 let x: i32 = 5;
 let y: Kilometers = 5;
 
-println!("x + y = {}", x + y);
+println!("x + y = {}", x + y); // this is allowed because Kilometers is an synonym to i32.
 ```
 
 ### The Never Type that Never Returns
@@ -329,7 +334,7 @@ impl<T> Option<T> {
 }
 ```
 
-Never ending `loop` also returns `!`.
+Never ending `loop` also returns `!`. However, this wouldn't be true if we included a `break`.
 
 ```rust
 loop {
