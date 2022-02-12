@@ -27,7 +27,6 @@ How raw pointers are different from references and smart pointers:
 ```rust
 let mut num = 5;
 
-
 // we can declare raw pointers that are possibly invalid
 // wouldn't have been allowed if we declare reference or mutable reference
 // immutable/mutable raw pointers are allowed
@@ -59,21 +58,21 @@ unsafe {
 
 `slice::from_raw_parts_mut`  takes a raw pointer and a length, and it creates a slice.
 
+Function doesn't need to be marked as unsafe if it contains unsafe block because it creates only valid pointers from the data the function has access to.
+
 ```rust
 use std::slice;
 
-// function doesn't need to be marked as unsafe if it contains unsafe block
-// because it creates only valid pointersfrom the data the function has access to
 fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
     let len = slice.len();
-    let ptr = slice.as_mut_ptr();
+    let ptr = slice.as_mut_ptr(); // this returns the raw ptr of the slice with type *mut i32
 
     assert!(mid <= len);
 
     unsafe {
         (
             slice::from_raw_parts_mut(ptr, mid),
-            slice::from_raw_parts_mut(ptr.add(mid), len - mid), // unsafe because it must trust the offset is valid
+            slice::from_raw_parts_mut(ptr.add(mid), len - mid), // unsafe because it must trust the pointer is valid
         )
     }
 }
@@ -84,7 +83,7 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 Calls to other languages are considered unsafe since they don't enforce Rust's rules and guarantees.
 
 ```rust
-extern "C" {
+extern "C" { // "C" part defines which application binary interface (ABI) the external fn uses
     fn abs(input: i32) -> i32;
 }
 
@@ -92,6 +91,15 @@ fn main() {
     unsafe {
         println!("absolute value of -3 according to C: {}", abs(-3));
     }
+}
+```
+
+### Calling Rust Functions from Other Languages
+
+```rust
+#[no_mangle] // tells compiler not to mangle (changes to a different name to give more info) the name of the function
+pub extern "C" fn call_from_c() {
+    println!("called a rust function from c!");
 }
 ```
 

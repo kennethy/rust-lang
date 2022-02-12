@@ -182,7 +182,7 @@ Rust compiler guarantees the data will not go out of scope before the reference 
 
 ### Rule of References
 
-- At any given time, you can have either one mutable reference or any number of immutable references.
+- At any given time, you can have either one mutable reference or any number of immutable references. This is to prevent data races at compile time.
 - References must always be valid.
 
 ## 4.3. The Slice Type
