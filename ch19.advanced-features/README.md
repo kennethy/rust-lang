@@ -12,7 +12,7 @@ Underlying computer hardware is inherently unsafe, unsafe operations need to be 
 - Call an unsafe function or method
 - Access or modify a mutable static variable
 - Implement an unsafe trait
-- Access fields of `union`S
+- Access fields of `union`
 
 ### Deferencing a Raw Pointer
 
@@ -152,11 +152,17 @@ unsafe impl Foo for i32 {
 }
 ```
 
+### Accessing Fields of a Union
+
+A `union` is similar to a `struct`, but only one declared field is used in a particular instance at one time. Unions are primarily used to interface with unions in C code.
+
 ## 19.2. Advanced Traits
 
 ### Associated Types
 
-Associated types seem similar to that of generics, but we use associated types to avoid annotating the types multiple times.
+When using generics, there could be multiple implementations of the trait, for example `Iterator<String> for Counter` or `Iterator<u32> for Counter`.
+
+Associated types are used to prevent a trait to be implemented for a type multiple types, because there can only be one, i.e. `impl Iterator for Counter`.
 
 They connect a type placeholder with a trait such that the trait method definitions can use these placeholder types in their signatures.
 
@@ -164,7 +170,7 @@ It allows us to define traits that use some types without needing to know exactl
 
 ```rust
 pub trait Iterator {
-    type Item;
+    type Item; // placeholder type that we can reference in trait methods
 
     fn next(&mut self) -> Option<Self::Item>;
 }
@@ -224,7 +230,7 @@ impl Add<Meters> for Millimeters {
 
 ### Fully Qualified Syntax for Disambiguation
 
-When a type implements multiple traits, and the traits all have a method that has a same name.
+When a type implements multiple traits, and the traits all have a method that has a same name:
 
 ```rust
 
@@ -232,20 +238,22 @@ fn main() {
     let person = Human;
     Pilot::fly(&person);
     Wizard::fly(&person);
-    person.fly(); // or Human::fly(&person);
+    person.fly(); // or Human::fly(&person) is called by default;
 }
 ```
 
-To disambiguate associated functions (static methods on the trait, methods that do not use self):
+To disambiguate associated functions (static methods on the trait, methods that do not use self), we have to use the fully qualified syntax (generally in the form `<Type as Trait>::funtion(receiver_if_method, next_arg, ...)`).
 
 ```rust
 fn main() {
     println!("{}", SomeType::foo());
-    println!("{}", <SomeType as AnotherType>::foo());
+    println!("{}", <SomeType as AnotherType>::foo()); // fully qualified syntax
 }
 ```
 
 ### Using Supertraits To Require One Trait's Functionaity with Another Trait
+
+A dependent trait is called `supertrait`. It's used when a trait depends on another trait to be implemented.
 
 ```rust
 use std::fmt;
