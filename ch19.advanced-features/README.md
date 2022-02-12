@@ -405,10 +405,11 @@ let list_of_strings: Vec<String> = list_of_numbers.iter().map(|i| i.to_string())
 let list_of_strings: Vec<String> = list_of_numbers.iter().map(ToString::to_string).collect();
 ```
 
-Enum values are be initialized 
+Enum values are initialized:
+
 ```rust
 enum Status {
-    Value(u32), // this is actually a initializer function, Status::Value
+    Value(u32), // this is actually an initializer function, Status::Value
     Stop,
 }
 
@@ -418,6 +419,8 @@ let list_of_statuses: Vec<Status> = (0u32..20).map(Status::Value).collect();
 ### Returning Closures
 
 Closures are represented by traits, so they can't be returned directly. Rust doesn't know how much space it needs to allocate for the closure.
+
+We can use a trait object to come around this restriction.
 
 ```rust
 fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
