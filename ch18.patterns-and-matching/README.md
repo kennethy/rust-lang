@@ -4,7 +4,7 @@
 
 ### Match Arms
 ```rust
-match VAUE {
+match VALUE {
     PATTREN => EXPRESSION,
     PATTERN => EXPRESSION,
     _ => EXPRESSION
