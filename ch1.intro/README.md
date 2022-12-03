@@ -22,3 +22,5 @@ Cargo is Rust's build system and package manager. Its configuration is stored in
 | Run | `cargo run ` |
 | Check without compile | `cargo check` |
 | Documentation | `cargo doc --open` |
+
+To create the project, use the `--bin` or `--lib` option if you want to create a binary or a library respectively.
