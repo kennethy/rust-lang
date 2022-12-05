@@ -116,7 +116,7 @@ println!("The value of y is : {}", y);
 let first = tup.0;
 ```
 
-The empty tuple `()` is has a  `unit type` and the value is called the `unit value`.
+The empty tuple `()` is a `unit type` and the value is called the `unit value`.
 
 **The Array Type**
 
