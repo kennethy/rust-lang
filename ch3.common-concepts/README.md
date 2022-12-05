@@ -140,7 +140,7 @@ println!("{:?}", a);
 
 ## 3.3. Functions
 
-Rust doesn't care wher eyou define your functions, only that they are defined somewhere.
+Rust doesn't care where you define your functions, only that they are defined somewhere.
 
 ```rust
 fn foo() {
