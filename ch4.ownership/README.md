@@ -54,7 +54,7 @@ let x2 = x1.clone(); // performs deep copy
 println!("x1 = {}, x2 = {}", x1, x2);
 ```
 
-Types such as intgers that have a known size at compile time are stored entirely on the stack, so copies of the actual values are quick to make. Therefore, stack-only data will not be invalidated.
+Types such as integers that have a known size at compile time are stored entirely on the stack, so copies of the actual values are quick to make. Therefore, stack-only data will not be invalidated.
 
 Implement the `Copy` trait to ensure a variable is still valid after assignment to another variable. This is allowed only on variables that hasn't implemented the `Drop` trait. In general, nothing that reuqires allocation or is some form of resource can implement `Copy`.
 
@@ -126,9 +126,9 @@ Variables are immutable by default, so are references. Mutable references allow 
 
 ```rust
 let mut s = String::from("hello world");
-fn(&mut s); // &mut s to allow fn to update value s points to
+fn modify(&mut s); // &mut s to allow fn to update value s points to
 
-fn(s: &mut String) {
+fn modify(s: &mut String) {
     s.push_str(", appended content");
 }
 ```
@@ -154,7 +154,7 @@ A data race happens when:
 - No mechanism to synchronize access to the data. 
 
 ```rust
- let mut s = String::from("hello");
+let mut s = String::from("hello");
 
 let r1 = &s; // ok
 let r2 = &s; // ok

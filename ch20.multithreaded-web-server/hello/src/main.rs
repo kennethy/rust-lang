@@ -26,7 +26,7 @@ fn handle_connection(mut stream: TcpStream) {
 
     let get = b"GET / HTTP/1.1\r\n"; // b"" converts the string into bytes
     let sleep = b"GET /sleep HTTP/1.1\r\n";
-
+kk
     let (status_line, filename) = if buffer.starts_with(get) {
         ("HTTP/1.1 200 OK", "hello.html")
     } else if buffer.starts_with(sleep) {

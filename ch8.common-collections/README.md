@@ -2,7 +2,7 @@
 
 ## 8.1. Vectors
 
-The type we will be storing in the vector needs to annotated if it starst out empty.
+The type we will be storing in the vector needs to annotated if it starts out empty.
 
 Like any other `struct`, a vector is freed when it goes out of scope. All of its contents are also dropped.
 
