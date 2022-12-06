@@ -13,7 +13,7 @@ fn main() {
 Rust programs can be configured to abort when panicking. This means there will be no cleanup by Rust, and it's up to the operating system to free the memory.
 
 ```toml
-// Cargo.toml
+# Cargo.toml
 [profile.release]
 panic = 'abort'
 ```
