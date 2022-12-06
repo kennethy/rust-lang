@@ -124,6 +124,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
     File::open("hello.txt")?.read_to_string(&mut s)?;
 
     Ok(s)
+}
 ```
 
 Rust provides a function for this:

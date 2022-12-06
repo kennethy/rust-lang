@@ -46,7 +46,6 @@ enum Option<T> {
     None,
 }
 ```
-d to
 or
 
 ```rust
