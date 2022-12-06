@@ -85,7 +85,7 @@ mod tests {
 
 By default, tests are run in parallel. Use the following to configure the tests to run in sequence.
 
-Ideally the tests should be independently so they can run in parallel without affecting each other.
+Ideally the tests should be independent so they can run in parallel without affecting each other.
 
 ```sh
 cargo test -- --test-threads=1
@@ -130,7 +130,7 @@ The `#[cfg(test)]` annotation on the tests module tells Rust to compile and run 
 
 **Testing Private Functions**
 
-Rust's privacy rules allow us sto test private functions.
+Rust's privacy rules allow us to test private functions.
 
 ### Integration tests
 
@@ -157,7 +157,10 @@ cargo test --test [PATTERN]
 
 **Submodules in Integration Tests**
 
-Utils are named with the special name `tests/common/mod.rs`. They would not show when running `cargo test --test`.
+To mark modules as utils modules, create a directory matching the module name and
+move the util functions into the corresponding `mod.rs`, like `/tests/some_module/mod.rs`.
+
+They would not show up when running `cargo test --test`.
 
 **Integration Tests for Binary Crates**
 

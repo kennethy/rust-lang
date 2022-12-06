@@ -387,7 +387,7 @@ struct ImportantExcerpt<'a> {
 
 ### Lifetime Ellison
 
-Compiler will add the lifetime annotations automatically based on three rules below. The compiler will complain if any of the parameters don't get its lifetime resolved. Rules apply to to function definitions and `impl` blocks.
+Compiler will add the lifetime annotations automatically based on three rules below. The compiler will complain if any of the parameters don't get its lifetime resolved. Rules apply to function definitions and `impl` blocks.
 
 1. Each parameter that is a reference gets its own lifetime annotation.
 2. If there's exactly one input lifetime parameter, that lifetime is assigned to all output lifetime parameters.
