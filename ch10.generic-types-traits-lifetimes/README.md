@@ -10,9 +10,9 @@ When we use a parameter in the body of the function, we have to declare the para
 fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
     let mut largest = &list[0];
 
-    for &i in list { // &i here because &[T] is passed
-        if i > largest {
-            largest = i;
+    for item in list {
+        if item > largest {
+            largest = item;
         }
     }
 
@@ -27,15 +27,22 @@ struct Point<T> {
     x: T,
     y: T,
 }
+
+// declaration
+let point = Point { x: 10, y: 10 }
 ```
 
-Or with multiple times:
+Or with multiple types:
 
 ```rust
 struct Point<T, U> {
     x: T,
     y: U,
 }
+
+// declaration
+let a = Point { x: 10, y: 10.0 } // allowed
+let b = Point { x: 10, y: 10 } // not allowed since we specified T and U to be different
 ```
 
 ### In Enum Definitions
@@ -72,6 +79,28 @@ impl Point<f32> {
         (self.x.powi(2) + self.y.powi(2)).sqrt()
     }
 }
+```
+
+It's possible the generic types are different from `impl` and method signatures.
+```rust
+struct Point<X1, Y1> {
+    x: X1,
+    y: Y1,
+}
+
+impl<X1, Y1> Point<X1, Y1> {
+    fn mixup<X2, Y2>(self, other: Point<X2, Y2>) -> Point<X1, Y2> {
+        Point {
+            x: self.x,
+            y: other.y,
+        }
+    }
+}
+
+// usage
+let p1 = Point { x: 5, y: 10.4 };
+let p2 = Point { x: "Hello", y: 'c' };
+let p3 = p1.mixup(p2);
 ```
 
 ### Monomorphization
@@ -190,10 +219,10 @@ fn returns_summarizable(switch: bool) -> impl Summary {
 ### Fixing the `largest` function with trait bounds
 
 ```rust
-fn largest<T: PartialOrd + Copy>list(list: &[T]) -> T {
-    let mut largest = list[0];
+fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
+    let mut largest = &list[0];
 
-    for &item in T {
+    for item in list {
         if item > largest {
             largest = item;
         }
