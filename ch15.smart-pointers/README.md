@@ -6,7 +6,7 @@ Smart pointers not only act like a pointer, but have additional metadata and cap
 
 ## 15.1. Using Box<T> to Point to Data on the Heap
 
-`Box<T>` is a pointer stored on the stack, that references data stored in the heap.
+`Box<T>` is a pointer stored on the stack that references data stored in the heap.
 
 Used when:
 1. have a type whose size is unknown at compile time and you want to use a value of that type in a context that requires an exact size
@@ -162,7 +162,7 @@ fn main() {
 
 ### Cloning an `Rc<T>`
 
-Every call to `Rc::clone()` increments the reference count. `a.clone()` is allowed the convention is to use `Rc::clone`.
+Every call to `Rc::clone()` increments the reference count. `a.clone()` is allowed but the convention is to use `Rc::clone`.
 
 Use `Rc::strong_count()` to get the reference count. The data is cleaned up only when strong count reaches to 0.
 
@@ -308,7 +308,7 @@ fn main() {
 
 Create a weak reference by calling `Rc::downgrade` with a reference to `Rc<T>`. It returns a smart pointer typed to `Weak<T>`. The count is tracked via `Rc::weak_count` and the difference between `strong_count` is that `weak_count` doesn't need to be 0 for the `Rc<T>` instance to be cleaned up.
 
-Weak references are useful when there's a acyclic data dependency, like a root node owning its child nodes but not the other way around. Children nodes should be dropped when the parent node is dropped, but if a child node is dropped, its parent should not be dropped.
+Weak references are useful when there's an acyclic data dependency, like a root node owning its child nodes but not the other way around. Children nodes should be dropped when the parent node is dropped, but if a child node is dropped, its parent should not be dropped.
 
 ```rust
 use std::cell::RefCell;

@@ -186,7 +186,7 @@ impl State for Published {
 }
 ```
 
-### Encoding states and 
+### Encoding states and Behaviour as Types
 
 ```rust
 pub struct Post {

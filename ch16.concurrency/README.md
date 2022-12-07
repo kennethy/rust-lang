@@ -61,7 +61,7 @@ fn main() {
         println!("Here's a vector: {:?}", v);
     });
 
-    drop(v); // oh no! v is dropped because spawned thread gets to run
+    drop(v); // oh no! v is dropped before spawned thread gets to run
 
     handle.join().unwrap();
 }
