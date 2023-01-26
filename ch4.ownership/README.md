@@ -25,7 +25,7 @@ A variable is no longer valid when it is out of scope.
 { // s is not valid since it hasn't been declared yet
     let s = "hello";
     // do stuff with s
-} // this scope is not over, and s no longer valid
+} // this scope is now over, and s is no longer valid.
 ```
 
 ### The `String` Type

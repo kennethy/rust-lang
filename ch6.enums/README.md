@@ -160,7 +160,7 @@ match coin {
 match x {
     None => None,
     Some(i) => {
-        // do somethign with i
+        // do something with i
     }
 }
 ```
