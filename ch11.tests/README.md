@@ -101,7 +101,7 @@ cargo test -- --show-output
 ### Run subset of tests.
 
 ```sh
-cargo test [N_NAME_PATTERN]
+cargo test [TEST_NAME_PATTERN]
 ```
 
 Ignore tests with:

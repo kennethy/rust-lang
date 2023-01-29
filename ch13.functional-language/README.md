@@ -21,7 +21,7 @@ let closure = |num: i32| -> i32 {
 
 Cacher Example
 
-`Fn` trait is provided by the standard library. All closutes implement at least one of the traits: `Fn`, `FnMut`, or `FnOnce`.
+`Fn` trait is provided by the standard library. All closures implement at least one of the traits: `Fn`, `FnMut`, or `FnOnce`.
 
 ```rust
 struct Cacher<T>
