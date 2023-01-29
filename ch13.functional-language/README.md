@@ -192,7 +192,7 @@ impl Iterator for Counter {
 }
 ```
 
-## 13.3.
+## 13.3. Improving the I/O Project
 
 `env::args()` returns an iterator.
 
