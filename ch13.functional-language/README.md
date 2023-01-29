@@ -76,7 +76,7 @@ We can force the closure to take ownership of the values by using the `move` key
 ```rust
 let x = vec![1, 2, 3];
 
-let equal_to_x = move |z| == z == x;
+let equal_to_x = move |z| z == x;
 
 // x can no longer be used since it's moved into the closure above
 
