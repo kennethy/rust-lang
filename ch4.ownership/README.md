@@ -56,7 +56,7 @@ println!("x1 = {}, x2 = {}", x1, x2);
 
 Types such as integers that have a known size at compile time are stored entirely on the stack, so copies of the actual values are quick to make. Therefore, stack-only data will not be invalidated.
 
-Implement the `Copy` trait to ensure a variable is still valid after assignment to another variable. This is allowed only on variables that hasn't implemented the `Drop` trait. In general, nothing that reuqires allocation or is some form of resource can implement `Copy`.
+Implement the `Copy` trait to ensure a variable is still valid after assignment to another variable. This is allowed only on variables that hasn't implemented the `Drop` trait. In general, nothing that requires allocation or is some form of resource can implement `Copy`.
 
 **Copy**
 
