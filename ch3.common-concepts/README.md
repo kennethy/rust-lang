@@ -14,7 +14,7 @@ y += 1; // y is mutable with the `mut` keyword
 
 **Constants**
 
-Constants are different from immutable variables. The type of the constant variable must always be annotated, and it must be assigned to a constant expression (cannot be a result of a function call).****
+Constants are different from immutable variables. The type of the constant variable must always be annotated, and it must be assigned to a constant expression (cannot be a result of a function call).
 
 ```rust
 const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
