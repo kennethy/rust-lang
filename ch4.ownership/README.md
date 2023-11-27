@@ -2,7 +2,7 @@
 
 ## 4.1. What is Ownership?
 
-In Rust, memory is managed through a system of ownership with a set rule rules that the compiler checks.
+In Rust, memory is managed through a system of ownership with a set of rules that the compiler checks.
 
 ### The Stack and the Heap
 
