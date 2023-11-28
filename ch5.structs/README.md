@@ -95,6 +95,8 @@ Using `{}` in `println!` for structs require them to implement `std::fmt::Displa
 Use `{:?}` for smaller structs and `{:#?}` for pretty-print.
 
 ```rust
+use std::fmt::Debug;
+
 #[derive(Debug)] // make `Rectangle` printable with {:?}
 struct Rectangle {
     width: u32,
