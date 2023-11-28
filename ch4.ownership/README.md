@@ -208,13 +208,13 @@ let a = [1, 2, 3];
 let len = a.len();
 
 // omit start
-let slice = [..len];
+let slice = &a[..len];
 
 // omit end
-let slice = [0..];
+let slice = &a[0..];
 
 // whole slice
-let slice = a[..];  // same as a[0..len]
+let slice = &a[..];  // same as a[0..len]
 ```
 
 **String Literals Are Slices**
