@@ -30,7 +30,7 @@ struct IpAddr {
 // a more compact way
 enum IpAddr {
     V4(String),
-    v6(String),
+    V6(String),
 }
 
 let home = IpAddr::V4(String::from("127.0.0.1"));
@@ -43,7 +43,7 @@ Each enum variant can have different types and amounts of associated data
 ```rust
 enum IpAddr {
     V4(u8, u8, u8, u8),
-    v6(String),
+    V6(String),
 }
 
 let home = IpAddr::V4(127, 0, 0, 1);
