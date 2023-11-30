@@ -154,7 +154,7 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-### 'as' keyword
+### `as` keyword
 
 Rename method with 'as' keyword.
 
