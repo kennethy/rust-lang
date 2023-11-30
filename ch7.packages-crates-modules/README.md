@@ -48,7 +48,7 @@ mod front_of_house {
     }
 }
 
-// `pub` keyword is juse to make a function public
+// `pub` keyword is used to make a function public
 pub fn eat_at_restaurant() {
     // Absolute path
     crate::front_of_house::hosting::add_to_waitlist();
