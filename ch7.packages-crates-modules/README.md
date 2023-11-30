@@ -130,7 +130,7 @@ mod back_of_house {
 }
 ```
 
-## 7.4. 'use' Keyword
+## 7.4. `use` Keyword
 
 The idiomatic way is to `use` the path up to the module level when bringing in functions. Use the full path when bringing in structs, enums, and other items (if they don't have conflicting names).
 
