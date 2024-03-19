@@ -126,7 +126,7 @@ Variables are immutable by default, so are references. Mutable references allow 
 
 ```rust
 let mut s = String::from("hello world");
-fn modify(&mut s); // &mut s to allow fn to update value s points to
+modify(&mut s); // &mut s to allow fn to update value s points to
 
 fn modify(s: &mut String) {
     s.push_str(", appended content");
