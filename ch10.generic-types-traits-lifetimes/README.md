@@ -351,7 +351,7 @@ Lifetime syntax is about connecting the lifetime of various parameters and retur
 
 The signature marks that: for some lifetime `'a`, the lifetime of the returned reference will be valid as long as both the parameters are.
 
-When we pass conrete references to `longest`, the concrete lifetime that is substited for `'a` is the part of the scope of `x` that overlaps with the scope of `y`. The generic lifetime `'a` will get the concrete lifetime that is equal to the smaller of the lifetimes of `x` and `y`.
+When we pass concrete references to `longest`, the concrete lifetime that is substited for `'a` is the part of the scope of `x` that overlaps with the scope of `y`. The generic lifetime `'a` will get the concrete lifetime that is equal to the smaller of the lifetimes of `x` and `y`.
 
 ```rust
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {}
