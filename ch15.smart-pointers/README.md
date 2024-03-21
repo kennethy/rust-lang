@@ -11,7 +11,7 @@ Smart pointers not only act like a pointer, but have additional metadata and cap
 Used when:
 1. have a type whose size is unknown at compile time and you want to use a value of that type in a context that requires an exact size
 2. large amount of data you want to transfer ownership but ensure the data won't be copied when you do so
-3. when you want to own a value and you care only only that it's a type that implements a particular trait rather than being of a specific type.
+3. when you want to own a value and you care only only that it's a type that implements a particular trait rather than being of a specific type
 
 
 ### Using a `Box<T>` to Store Data on the Heap
@@ -224,7 +224,7 @@ mod tests {
 
 ### Keeping Track of Borrows at Runtime with RefCell<T>
 
-With `RefCell<>T`, `borrow()` returns a smart pointer `Ref<T>`, whereas `borrow_mut()` returns another smart pointer type `RefMut<T>`. Both implements `Deref` so they can be treated like references. `Ref<T>` keeps track of the count of borrows, and it will go out of scope when the count reaches zero. It allows many immutable borrows or one mutable borow at any point in time.
+With `RefCell<T>`, `borrow()` returns a smart pointer `Ref<T>`, whereas `borrow_mut()` returns another smart pointer type `RefMut<T>`. Both implements `Deref` so they can be treated like references. `Ref<T>` keeps track of the count of borrows, and it will go out of scope when the count reaches zero. It allows many immutable borrows or one mutable borow at any point in time.
 
 ### Having multiple owners of mutable data by combining `Rc<T>` and `RefCell<T>`.
 

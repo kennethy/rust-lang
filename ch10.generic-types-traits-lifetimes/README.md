@@ -373,7 +373,7 @@ fn main() {
 
 ### Thinking in Terms of Lifetimes
 
-When returning a reference from a funtion, the lifetime parameter for the return type needs to match the lifetime parameter for one of the parameters.
+When returning a reference from a function, the lifetime parameter for the return type needs to match the lifetime parameter for one of the parameters.
 
 ### Annotations in Structs
 
