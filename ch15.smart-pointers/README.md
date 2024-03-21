@@ -336,7 +336,9 @@ fn main() {
         children: RefCell::new(vec![Rc::clone(&leaf)]),
     });
 
-    *leaf.parent.borrow_mut() = Rc::downgrade(&branch); // downgrade when assign
+    // downupgrade when assign
+    // same as: *(leaf.parent.borrow_mut())
+    *leaf.parent.borrow_mut() = Rc::downgrade(&branch);
 
     println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
 }
