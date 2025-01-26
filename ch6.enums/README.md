@@ -91,7 +91,7 @@ let absent_number: Option<i32> = None;
 
 ## 6.2. The `match` control flow
 
-Th power of `match` comes from the expresiveness of the patterns and the fact the compiler confirms that all possible cases are handled.
+Th power of `match` comes from the expressiveness of the patterns and the fact the compiler confirms that all possible cases are handled.
 
 ```rust
 enum Coin {
@@ -110,7 +110,7 @@ fn value_in_cents(coin: Coin) -> u8 {
         Coin::Nickel => 5,
         Coin::Dime => 10,
         Coin::Quarter => 25,
-        _ => (), // '_' matches any value, `()` unit value, does not do anything
+        // _ => (), // '_' matches any value, `()` unit value, does not do anything
     }
 }
 ```
