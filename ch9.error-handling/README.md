@@ -83,7 +83,7 @@ let f = File::open("hello.txt").expect("Panic Message");
 
 ### Propagating Errors
 
-The function must returns a `Result` if the caller is capable of handling the error.
+The function must return a `Result` if the caller is capable of handling the error.
 
 ```rust
 use std::fs::File;
@@ -133,7 +133,7 @@ Rust provides a function for this:
 use std::fs::File;
 
 fn read_username_from_file() -> Result<String, io::Error> {
-    fs::read_to_string("hello.txt");
+    fs::read_to_string("hello.txt")
 }
 ```
 
