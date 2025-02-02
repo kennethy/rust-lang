@@ -109,7 +109,7 @@ hello(&(*m)[..]);
 Rust does deref coercion when it finds types and trait implementations in three cases:
 1. From `&T` to `&U` when `T: Deref<Target = U>`
 2. From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
-3. From `&mut T` to `T: Deref<Target=U>`
+3. From `&mut T` to `&U` when `T: Deref<Target=U>`
 
 ## 15.3 Running Code on Cleanup with the `Drop` Trait
 
